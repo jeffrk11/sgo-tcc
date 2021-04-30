@@ -1,0 +1,141 @@
+<!-- para palavras pt-br -->
+<meta charset="UTF-8">
+<!--  card funcionario, com suas informacoes resumidas num card -->
+<th:block th:fragment="card_resumo_info">
+		<div class="row align-items-center p-4 no-gutters">
+						<!--  codigo -->
+						<div class="col-6 p-2">
+							<div class="d-flex flex-row align-items-center">
+								<i class="fas fa-lg fa-user-tag jef-icones-escuros mr-2" data-toggle="tooltip" title="Código mátricula"></i>
+								<h5 id="model-funcionario-cd" class="p-0 m-0" style="color: rgb(22, 74, 71)" th:text="${func?.cd == null || func?.cd == ''} ? '---' : ${func?.cd}"></h5>
+							</div>
+						</div>
+						<!--  telefone -->
+						<div class="col-6 p-2">
+							<div class="d-flex flex-row align-items-center">
+								<i class="fab fa-lg fa-whatsapp jef-icones-escuros mr-2" data-toggle="tooltip" title="Whatsapp"></i>
+								<h5  id="model-funcionario-celular" class="p-0 m-0" style="color: rgb(22, 74, 71)" th:text="${func?.celular == '' || func?.celular == null} ? '(--) ---- - ----' : ${func?.celular}"></h5>
+							</div>
+						</div>
+						<!-- admissao -->
+						<div class="col-6 p-2">
+							<div class="d-flex flex-row align-items-center">
+								<i class="fas fa-lg fa-calendar-plus jef-icones-escuros mr-2" data-toggle="tooltip" title="Admissão"></i>
+								<h5  id="model-funcionario-admissao" class="p-0 m-0" style="color: rgb(22, 74, 71)" th:text="${func?.admissao == null || func?.admissao == ''} ? '--/--/----' : ${#dates.format(func.admissao, 'dd/MM/yyyy')}"></h5>
+							</div>
+						</div>
+						<!--  demissão -->
+						<div class="col-6 p-2">
+							<div class="d-flex flex-row align-items-center">
+								<i class="fas fa-lg fa-calendar-times jef-icones-escuros mr-2" data-toggle="tooltip" title="demissão"></i>
+								<h5  id="model-funcionario-demissao" class="p-0 m-0" style="color: rgb(22, 74, 71)" th:text="${func?.demissao == null || func?.demissao == ''} ? '--/--/----' : ${#dates.format(func.demissao, 'dd/MM/yyyy')}"></h5>
+							</div>
+						</div>
+						<!-- Entrada -->
+						<div class="col-6 p-2">
+							<div class="d-flex flex-row align-items-center">
+								<i class="fas fa-lg fa-business-time jef-icones-escuros mr-2" data-toggle="tooltip" title="Entrada"></i>
+								<h5  id="model-funcionario-entrada" class="p-0 m-0" style="color: rgb(22, 74, 71)" th:text="${func?.entrada == null || func?.entrada == ''} ? '--:--' : ${#dates.format(func.entrada, 'HH:mm')}"></h5>
+							</div>
+						</div>
+						<!--  Saida -->
+						<div class="col-6 p-2">
+							<div class="d-flex flex-row align-items-center">
+								<i class="fa fa-lg fa-sign-out-alt jef-icones-escuros mr-2" data-toggle="tooltip" title="Saída"></i>
+								<h5  id="model-funcionario-saida"  class="p-0 m-0" style="color: rgb(22, 74, 71)" th:text="${func?.saida == null || func?.saida == ''} ? '--:--' : ${#dates.format(func.saida, 'HH:mm')}"></h5>
+							</div>
+						</div>
+						<!--  cidade -->
+						<div class="col-6 p-2">
+							<div class="d-flex flex-row align-items-center">
+								<i class="fas fa-lg fa-city jef-icones-escuros mr-2" data-toggle="tooltip" title="Cidade"></i>
+								<h5  id="model-funcionario-cidade" class="p-0 m-0" style="color: rgb(22, 74, 71)" th:text="${func?.cidade == null || func?.cidade == ''} ? '-' : ${func?.cidade}"></h5>
+							</div>
+						</div>
+						<!--  estado -->
+						<div class="col-6 p-2">
+							<div class="d-flex flex-row align-items-center">
+								<i class="fas fa-lg fa-map-marker-alt jef-icones-escuros mr-2" data-toggle="tooltip" title="Estado"></i>
+								<h5  id="model-funcionario-estado" class="p-0 m-0" style="color: rgb(22, 74, 71)" th:text="${func?.estado == null || func?.estado == ''} ? '-' : ${func?.estado}"></h5>
+							</div>
+						</div>
+						<!--  banco -->
+						<div class="col-6 p-2">
+							<div class="d-flex flex-row align-items-center">
+								<i class="fas fa-lg fa-university jef-icones-escuros mr-2" data-toggle="tooltip" title="Conta Bancária"></i>
+								<h5  id="model-funcionario-banco" class="p-0 m-0" style="color: rgb(22, 74, 71)" th:text="${func?.banco == '' || func?.banco == null} ? '-' : ${func?.banco}"></h5>
+							</div>
+						</div>
+						<!--  tipo conta -->
+						<div class="col-6 p-2">
+							<div class="d-flex flex-row align-items-center">
+								<i class="fas fa-lg fa-receipt jef-icones-escuros mr-2" data-toggle="tooltip" title="Tipo de conta"></i>
+								<h5  id="model-funcionario-tipo_conta" class="p-0 m-0" style="color: rgb(22, 74, 71)" th:text="${func?.tipo_conta}"></h5>
+							</div>
+						</div>
+						<!--  Salario -->
+						<div class="col-6 p-2">
+							<div class="d-flex flex-row align-items-center">
+								<i class="fas fa-lg fa-donate jef-icones-escuros mr-2" data-toggle="tooltip" title="Salário"></i>
+								<h5  id="model-funcionario-salario" class="p-0 m-0" style="color: rgb(22, 74, 71)" th:text="${'R$ '+ #numbers.formatDecimal(func?.salario, 1, 'DEFAULT', 2, 'DEFAULT')}"></h5>
+							</div>
+						</div>
+						<!--  Vale transporte -->
+						<div class="col-6 p-2">
+							<div class="d-flex flex-row align-items-center">
+								<i class="fas fa-lg fa-bus jef-icones-escuros mr-2" data-toggle="tooltip" title="Vale Transporte"></i>
+								<h5  id="model-funcionario-transporte" class="p-0 m-0" style="color: rgb(22, 74, 71)" th:text="${'R$ '+ #numbers.formatDecimal(func?.transporte, 1, 'DEFAULT', 2, 'DEFAULT')}"></h5>
+							</div>
+						</div>											
+					</div>
+</th:block>
+<!-- card com foto nome e estrelas funcionario -->
+<th:block th:fragment="card_resumo_func">
+	<!-- imagem do funcionario -->
+	<label for="img-file-input"> 
+		<img id="jef-img-funcionario" class="rounded-circle m-1" src="https://via.placeholder.com/120/000000/FFFFFF" style="background-color: gray; width: 160px; height: 160px">
+	</label>					
+	<h3  id="model-funcionario-nome" style="color: rgb(22, 74, 71)" th:text="${func?.nome}"></h3>
+	<h4 id="model-funcionario-cargo"  style="color: rgb(22, 74, 71)" th:text="${func?.cargo}"></h4>
+	<div id="container-estrelas" class="row justify-content-around p-2">
+		<i id="estrela-1" style="color: gray"
+			class="fa fa-star fa-lg estrela-ponto"></i> <i id="estrela-2"
+			style="color: gray" class="fa fa-star fa-lg estrela-ponto"></i> <i
+			id="estrela-3" style="color: gray"
+			class="fa fa-star fa-lg estrela-ponto"></i> <i id="estrela-4"
+			style="color: gray" class="fa fa-star fa-lg estrela-ponto"></i> <i
+			id="estrela-5" style="color: gray"
+			class="fa fa-star fa-lg estrela-ponto"></i>
+	</div>
+</th:block>
+<!-- card obra resumida -->
+<th:block th:fragment="card_obra_resumida(controle,cliente,qtd_equipe,datafim)">
+	
+		<div class="card p-2 w-100 h-100 jef-card-cor">
+			<div class="d-flex flex-row justify-content-between align-items-center w-100 p-2">
+				<!-- controle -->
+				<h6 class=" m-0 p-0" style="color: rgb(33, 109, 111)" th:text="${controle}"></h6>
+				<a href="#"><i class="fas fa-ellipsis-v jef-icones-escuros"></i></a>
+			</div>
+			<div class="d-flex flex-column justify-content-between align-items-center w-100 p-2">
+				<img class="m-2" src="/imgs/ajvlogo.png" width="130px">
+				<!-- nome cliente -->
+				<h6 class="jef-card-text-item m-1" th:text="${cliente}"></h6>
+				<span style="color: rgb(22, 74, 71)">Progresso em 58%</span>
+
+				<div class="d-flex flex-row justify-content-around w-100 p-2 mt-2">
+					<div class="d-flex flex-row align-items-center">
+						<i class="fas fa-lg fa-users jef-icones-escuros mr-2" data-toggle="tooltip" title="equipe"></i>
+						<!-- quantidade equipe -->
+						<h5 class="p-0 m-0" style="color: rgb(33, 109, 111)" th:text="${qtd_equipe}"></h5>
+					</div>
+					<div class="d-flex flex-row align-items-center">
+						<i class="fas fa-lg fa-calendar-times jef-icones-escuros mr-2" data-toggle="tooltip" title="Data Limite"></i>
+						<!-- data final -->
+						<h5 class="p-0 m-0" style="color: rgb(33, 109, 111)" th:text="${datafim}"></h5>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+</th:block>

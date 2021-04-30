@@ -1,0 +1,180 @@
+<!-- para palavras pt-br -->
+<meta charset="UTF-8">
+<!-- cards -->
+<th:block th:fragment="card_movimentacao">
+	<div class="card p-2 w-100 jef-card-cor">
+		<!--titulo card-->
+		<h6 class="jef-card-titulo">Movimentação</h6>
+
+		<div class="row align-items-center justify-content-center">
+			<!--  coluna esquerda form -->
+			<div class="col-xl-2 col-md-8 align-self-start mt-2 mr-xl-4">
+				<div class="row no-gutters justify-content-center mb-4">
+					<i class="fas fa-file-invoice-dollar fa-7x jef-card-icone-cor"></i>
+				</div>
+				<div class="row no-gutters justify-content-between">
+					<!-- Categorias -->
+					<div class="form-group col-6 col-xl-12">
+						<label class="jef-card-text-item" for="model-categoria">Categoria</label>
+						<select name="categoria" class="form-control jef-input-escuro"
+							id="model-categoria" th:value="${movimentacao?.categoria}" required="required">
+							<!--  automatico pegando do ENUM -->
+							<option th:each="c : ${categorias}" th:text="${c}"></option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<!--coluna direita form-->
+			<div class="col-xl-8 col-md-8">
+				<!--descricao-->
+				<div class="form-group">
+					<label for="formGroupExampleInput " class="jef-card-text-item">Descrição</label>
+					<input name="descricao" type="text" autocomplete="off"
+						class="form-control jef-input-escuro-obrigatorio" maxlength="100"
+						required="required" id="model-descricao" th:value="${movimentacao?.descricao}"
+						placeholder="Ex: Conta de luz do escritório" />
+				</div>
+				<!-- linha documento e referencia -->
+				<div class="row no-gutters justify-content-between">
+					<!--documento-->
+					<div class="form-group col-xl-6 col-12 pr-xl-2">
+						<label for="formGroupExampleInput" class="jef-card-text-item">Documento</label>
+						<input name="documento" type="text" autocomplete="off"
+							class="form-control jef-input-escuro" maxlength="100"
+							 id="model-documento" th:value="${movimentacao?.documento}"
+							placeholder="Ex: 1000215-25/0005" />
+					</div>
+					
+					<!--data referencia-->
+					<div class="form-group col-xl-6 col-12">
+						<label for="model-referencia" class="jef-card-text-item">Referência</label> 
+						<input name="referencia" autocomplete="off"
+							type="month" maxlength="10" id="model-referencia"
+							class="form-control jef-input-escuro" th:value="${#dates.format(movimentacao?.referencia, 'yyyy-MM')}" />
+					</div>
+				</div>
+				<!-- linha situacao categoria-->
+				<div class="row no-gutters justify-content-between">
+					<!-- situação -->
+					<div class="form-group col-12 col-xl-6">
+						<label class="jef-card-text-item">Situação</label>
+						<div class="p2">
+							<div class="toggle_radio" id="div-container-radio-situacao">
+								<input name="situacao" value="PENDENTE" type="radio" class="toggle_option tt1" id="fts1" checked> 
+								<input name="situacao" value="EFETIVADA" type="radio" class="toggle_option tt2" id="fts2">
+								<label for="fts1"><p>Pendente</p></label> 
+								<label for="fts2"><p>Efetivada</p></label>
+								<div class="toggle_option_slider"></div>
+							</div>
+						</div>
+
+					</div>
+	
+					<!--  categoria -->
+					<div class="form-group col-12 col-xl-6">
+						<!-- tipos -->
+						<div class="p2">
+						<label class="jef-card-text-item">Tipo</label>
+							<div class="toggle_radio" id="div-container-radio-tipo">
+								<input name="tipo" value="DESPESA" type="radio" class="toggle_option tt1" id="ftt1" checked> 
+								<input name="tipo" value="RECEITA" type="radio" class="toggle_option tt2" id="ftt2">
+								<label for="ftt1"><p>Despesa</p></label> 
+								<label for="ftt2"><p>Receita</p></label>
+								<div class="toggle_option_slider"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--  linha pagamentos vencimento e pagamento -->
+				<div class="row no-gutters justify-content-between">
+					<!--data vencimento-->
+					<div class="form-group col-xl-6 col-12 pr-xl-2">
+						<label for="model-vencimento" class="jef-card-text-item">Data Vencimento</label> 
+						<input th:value="${movimentacao?.vencimento}" name="vencimento" autocomplete="off"	type="date" id="model-vencimento"class="form-control jef-input-escuro" />
+					</div>
+					<!--data pagamento-->
+					<div class="form-group col-xl-6 col-12 ">
+						<label for="model-data_pagamento" class="jef-card-text-item">Data Pagamento</label> 
+						<input th:value="${movimentacao?.data_pagamento}"name="data_pagamento" id="model-data_pagamento" type="date"class="form-control jef-input-escuro"/>
+					</div>
+				</div>
+				<!-- linha valor -->
+				<div class="row no-gutters justify-content-between">
+				<!-- pagamento-->
+					<div class="form-group col-xl-6 col-12 pr-xl-2">
+							<label for="model-pagamento" class="jef-card-text-item">Valor Pagamento</label>
+							<input name="pagamento" autocomplete="off" type="number"
+								min="0" step="any" class="form-control jef-input-escuro" required="required"
+								th:value="${movimentacao?.pagamento}" id="model-pagamento"
+								placeholder="Ex: 100,00" />
+					</div>
+				</div>
+				<!--descricao-->
+				<div class="form-group">
+					<label for="obs" class="jef-card-text-item">Observação</label>
+					<textarea name="obs" type="text" autocomplete="off" id="model-obs" th:value="${movimentacao?.obs}"
+						class="form-control jef-input-escuro" maxlength="255"></textarea>
+				</div>
+				
+			</div>
+
+		</div>
+
+	</div>
+
+</th:block>
+<th:block th:fragment="card_vincular">
+	<div class="card p-2 mt-2 w-100 jef-card-cor">
+		<!--titulo card-->
+		<h6 class="jef-card-titulo">Vinculação</h6>
+		
+		<div id="container-selecionar"	class="row no-gutters align-items-start justify-content-center">
+			
+			<div class="col-8 mt-2">
+				<div class="d-flex flex-column align-items-center p-4">
+				<h2 class="jef-card-titulo fs-1 mb-4">Escolha uma obra ou funcionário para vincular a movimentação</h2>
+					<div class="d-flex w-100 flex-row justify-content-around">
+						
+							<!-- card -->
+							<div id="mini_card_func" class="d-flex flex-column justify-content-center align-items-center jef-card-selecionar" style="cursor:pointer">
+								<div class="jef-icon-container mb-2">
+									<i class="fas fa-user  fa-6x jef-card-icone-cor"></i>
+								</div>
+								<span class="fs-1">Funcionário</span>
+								<span class="fs-2 text-muted" >Vincular um funcionário</span>
+							</div>
+							<!-- card -->
+							<div id="mini_card_obra" class="d-flex flex-column justify-content-center align-items-center jef-card-selecionar" style="cursor:pointer">
+								<div class="jef-icon-container mb-2 ">
+									<i class="fas fa-industry fa-6x jef-card-icone-cor"></i>
+								</div>
+								<span class="fs-1">Obra</span>
+								<span class="fs-2 text-muted">Vincular uma obra</span>
+							</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		
+		
+		<div id="conteudo_pesquisar_obra" style="display: none" class="row no-gutters align-items-start justify-content-center">
+			<th:block th:include="funcionarios/cards :: mini_card_pesquisar_obras"></th:block>
+		</div>
+		<div id="conteudo_pesquisar_func" style="display: none" class="row no-gutters align-items-start justify-content-center">
+			<th:block th:include="obra/cards :: mini_card_pesquisar_funcionarios"></th:block>
+		</div>
+		
+		<div id="conteudo_vinculado_obra" style="display: block" class="row no-gutters align-items-start justify-content-center">
+			<th:block th:include="funcionarios/cards :: modal_info"></th:block>
+		</div>
+		<div id="conteudo_vinculado_func" style="display: block" class="row no-gutters align-items-start justify-content-center">
+			<th:block th:include="obra/cards :: modal_info"></th:block>
+		</div>
+		
+		<!-- container vem dps do modal para que o jquery preencha sempre o modal primeiro ja que possuem ID iguais -->
+		<div id="container-vinculados" class="d-flex flex-column w-100">
+		
+		</div>
+	</div>
+</th:block>

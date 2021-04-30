@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html
+xmlns:th="http://thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+	<meta charset="UTF-8">
+	<title>Sistema AJV</title>
+	<!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    
+    <script src="https://kit.fontawesome.com/9bfa376dbe.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+	<!--  navbar  menu-->
+	<nav>
+	    <div class="nav-wrapper">
+	      <a href="#!" class="brand-logo"><i class="material-icons">cloud</i>Logo</a>
+	      <ul class="right hide-on-med-and-down">
+	        <li><a href="/cadastrarObra"><i class="fas fa-industry"> </i> Cadastrar Obra</a></li>
+	        <li><a href="/obras"><i class="fas fa-clipboard-list"> </i> Obras</a></li>
+	        <li><a href="/funcionarios"><i class="fas fa-users"> </i> Funcionarios</a></li>
+	      </ul>
+	    </div>
+	  </nav>
+
+	<h1>Lista de Obras</h1>
+	<a href="/cadastrarObra" class="waves-effect waves-light btn"><i class="material-icons left">work</i>Cadastrar Obra</a>
+	
+	<table class="container">
+		<thead>
+			<tr >
+				<th>Descrição</th>
+				<th>Equipe</th>
+				<th>Data</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="obra : ${obra}">
+				<td><a th:href="${(#mvc.url('OC#detalhesObra').arg(0, obra.cd)).build()}"><span th:text="${obra.descricao}"> </span></a> </td>
+				<td><span th:text="${obra.equipe}"> </span> </td>
+				<td><span th:text="${obra.data}"> </span> </td>
+				<td><a th:href="${(#mvc.url('OC#deletarObra').arg(0, obra.cd)).build()}"><i class="fas fa-trash-alt"></i></a> </td>
+			</tr>
+		</tbody>
+	</table>
+
+
+	<!--JavaScript at end of body for optimized loading-->
+    <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+</body>
+</html>

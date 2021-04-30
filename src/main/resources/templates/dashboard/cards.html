@@ -1,0 +1,122 @@
+<!-- para palavras pt-br -->
+<meta charset="UTF-8">
+<!--  card funcionario, utilizado no cadastro e na atualizacao -->
+<th:block th:fragment="card_pequeno_total_icone(titulo,texto,icone,href)">
+	<div class="card p-2 jef-card-cor w-100">
+	<a th:href="${href}" style="text-decoration:none">
+		<h6 class="jef-card-titulo" th:text="${titulo}"></h6>
+		<div class="d-flex flex-row p-2 align-items-center justify-content-around w-100 h-100">
+			<i class="fas fa-2x jef-icones-escuros mr-2" th:classappend="${icone}"></i>
+			<span class="jef-card-text-item-solo" th:text="${texto} ?: '-' "></span>
+		</div>
+	</a>
+	</div>
+</th:block>
+<!-- card funcionarios quantitativo -->
+<th:block th:fragment="card_medio_funcionario">
+	
+					<div class="card p-2 w-100 h-100 jef-card-cor">
+						<h6 class="jef-card-titulo">Funcionários</h6>
+						<div class="d-flex flex-column justify-content-center h-100">
+							<div class="d-flex w-100 p-1">
+							<div class="col-4">
+								<!--legendas graficos-->
+								<div class="d-flex flex-column justify-content-around w-100 h-100 ml-1">
+										<span> <i class="fas fa-circle"
+											style="color: rgb(197, 255, 105)"></i> <span
+											class="jef-card-text-item"> Ativos: </span>
+											<span class="jef-card-text-item" th:text="${dashinfo.get('ATIVO')} ?: '0'"></span>
+										</span> 
+										<span><i class="fas fa-circle" style="color: rgb(255, 145, 105)"></i><span
+											class="jef-card-text-item"> Inativos: </span>
+											<span class="jef-card-text-item" th:text="${dashinfo.get('INATIVO')} ?: '0'"></span>
+										</span> 
+										<span><i class="fas fa-circle" style="color: rgb(128, 128, 128)"></i><span
+											class="jef-card-text-item"> Afastados: </span>
+											<span class="jef-card-text-item" th:text="${dashinfo.get('AFASTADO')} ?: '0'"></span>
+										</span>
+								</div>
+							</div>
+							<!-- grafico -->
+							<div class="col-8">
+								<div class="d-flex justify-content-center w-100 p-1">
+									<!-- grafico funcionarios -->
+									<canvas id="dashChartFunc1" ></canvas>							
+								</div>
+							</div>
+
+							</div>
+						</div>
+					</div>
+</th:block>
+<!-- card funcionarios quantitativo vertical-->
+<th:block th:fragment="card_medio_funcionario_vertical">
+	
+					<div class="card p-2 h-100 jef-card-cor">
+						<h6 class="jef-card-titulo">Funcionários</h6>
+						<div class="d-flex flex-column pt-2">
+							<div class="d-flex justify-content-center w-100 p-4">
+								<!-- grafico funcionarios -->
+								<canvas id="dashChartFunc" ></canvas>							
+							</div>
+							<div class="d-flex justify-content-center w-100 m-2">
+								<!--lista card auxiliar-->
+								<div class="d-flex flex-row justify-content-around w-100 ml-1">
+									<span> <i class="fas fa-circle"
+										style="color: rgb(197, 255, 105)"></i> <span
+										class="jef-card-text-item"> Ativos: </span>
+										<span class="jef-card-text-item" th:text="${dashinfo.get('ATIVO')} ?: '0'"></span>
+									</span> 
+									<span><i class="fas fa-circle" style="color: rgb(255, 145, 105)"></i><span
+										class="jef-card-text-item"> Inativos: </span>
+										<span class="jef-card-text-item" th:text="${dashinfo.get('INATIVO')} ?: '0'"></span>
+									</span> 
+									<span><i class="fas fa-circle" style="color: rgb(128, 128, 128)"></i><span
+										class="jef-card-text-item"> Afastados: </span>
+										<span class="jef-card-text-item" th:text="${dashinfo.get('AFASTADO')} ?: '0'"></span>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				
+</th:block>
+<!--  card obras quantitativo -->
+<th:block th:fragment="card_medio_obra">
+	
+	<div class="card p-2 h-100 jef-card-cor">
+						<h6 class="jef-card-titulo">Obras</h6>
+						<div class="row pt-2">
+							<div class="col">
+								<!--lista card auxiliar-->
+								<div class="d-flex flex-column ml-1">
+									<span>
+										<i class="fas fa-circle" style="color: rgb(197, 255, 105)"></i>
+										<span class="jef-card-text-item">Ocorrendo: </span>
+										<span class="jef-card-text-item" th:text="${dashinfo.get('QtdObraEXECUTANDO')} ?: '0'"></span>
+									</span> 
+									<span>
+										<i class="fas fa-circle" style="color: rgb(255, 145, 105)"></i>	
+										<span class="jef-card-text-item">Realizadas: </span>
+										<span class="jef-card-text-item" th:text="${dashinfo.get('QtdObraCONCLUIDA')} ?: '0'"></span> 
+									</span>
+									<span>
+										<i class="fas fa-circle" style="color: rgb(0, 255, 255)"></i>	
+										<span class="jef-card-text-item">Analisando: </span>
+										<span class="jef-card-text-item" th:text="${dashinfo.get('QtdObraANALISANDO')} ?: '0'"></span> 
+									</span>
+									<span>
+										<i class="fas fa-circle" style="color: rgb(128, 128, 128)"></i>	
+										<span class="jef-card-text-item">Perdidas: </span>
+										<span class="jef-card-text-item" th:text="${dashinfo.get('QtdObraPERDIDA')} ?: '0'"></span> 
+									</span>
+								</div>
+							</div>
+							<div class="col-auto mr-2">
+								<!-- grafico funcionarios -->
+								<canvas id="dashChartObra" width="150px" height="80px"></canvas>	
+							</div>
+						</div>
+					</div>
+				
+</th:block>

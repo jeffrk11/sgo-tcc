@@ -1,0 +1,39 @@
+<!-- para palavras pt-br -->
+<meta charset="UTF-8">
+<!--barra fixa em cima user-->
+	<nav class="navbar d-flex w-100 justify-content-end align-items-center position-fixed sticky-top jef-border-bottom p-0"
+		style="height: 60px; background-color: RGB(6,19,37); z-index: 1">
+		<a href=""><i class="fas fa-cog fa-lg jef-icones-escuros mr-2"></i></a>		
+		<div class="dropdown">
+			<button class="d-flex d-row bg-transparent dropdown-toggle " style="border:none;outline:none;cursor:pointer" type="button"   id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<img id="img_user_func"class="rounded-circle m-2" src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" style="background-color: white; width: 42px; height: 42px"> </img>
+				<div class="d-flex flex-column mr-2">
+					<b style="color: rgb(22, 74, 71)" th:text="${usuario_funcionario.nome}"></b>
+			        <em style="color: rgb(22, 74, 71)" th:text="${usuario_funcionario.cargo}"></em>
+				</div>
+			</button>
+			<ul class="dropdown-menu jef-dropdown-estilo" aria-labelledby="dropdownMenuButton">
+				<li class="row no-gutters w-100"><a class="linksjef" th:href="@{/funcionarios/resumofunc/{id}(id = ${usuario_funcionario.id})}"><i class="fas fa-user jef-icones-escuros p-2"></i><span class="text-light">Perfil</span></a></li>
+				<li class="row no-gutters w-100"><a class="linksjef" href="/logout"><i class="fas fa-sign-out-alt jef-icones-escuros p-2"></i><span class="text-light">Sair</span></a></li>
+			</ul>
+		</div>
+	</nav>
+	<http auto-config="true" use-expressions="true">
+        <logout logout-url="/logout" />
+    </http>
+    <!-- script para imagem de perfil do user -->
+    <script th:inline="javascript">
+
+	   var img_user_func = /*[[${img_user_perfil}]]*/"";
+		if(img_user_func != null && img_user_func.length > 0){  			
+			uint8ArrayNew  = new Uint8Array(img_user_func);	  
+			var arrayBuffer = uint8ArrayNew.buffer;
+			var urlCreator = window.URL || window.webkitURL;
+			blob = new Blob([arrayBuffer],{ type: "image/jpeg" });	
+	
+			document.getElementById("img_user_func").setAttribute("src", urlCreator.createObjectURL( blob ))							
+			setTimeout(function() {
+				document.getElementById("img_user_func").style.padding = "1px";
+			}, 100);
+		}
+    </script>

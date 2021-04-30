@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html
+lang="pt"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:th="http://thymeleaf.org">
+
+<div th:fragment="resultsList">
+<label class="jef-card-text-item mb-2">Lista de movimentações</label>
+					<table class="table table-sm table-hover text-white">
+						<thead style="background-color: rgb(6, 19, 37); color: rgb(166, 255, 249)">
+							<tr>
+								<th>CD</th>
+								<th>Descrição</th>
+								<th>Categoria</th>
+								<th>Referência</th>
+								<th>Situação</th>
+								<th>Pagamento</th>
+								<th>Vencimento</th>
+								<th>Valor</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody >
+							<tr id="tr-movimentacoes" class="jef-click" th:each="movi : ${movimentacoes}">
+								<td th:onclick="trocx()"><span th:text="${movi.id}"></span></td>
+								<td th:onclick="trocx()"><span th:text="${movi?.descricao}"></span></td>
+								<td th:onclick="trocx()"><span th:text="${movi.categoria}"></span></td>
+								<td th:onclick="trocx()"><span th:text="${#dates.format(movi.referencia, 'MM/yyyy')}"></span></td>
+								<td th:onclick="trocx()"><span th:text="${movi.situacao}"></span></td>
+								<td th:onclick="trocx()"><span th:text="${#dates.format(movi.data_pagamento, 'dd/MM/yyyy')}"></span></td>
+								<td th:onclick="trocx()"><span th:text="${#dates.format(movi.vencimento, 'dd/MM/yyyy')}"></span></td>
+								<td th:onclick="trocx()"><span th:text="${'R$ '+ #numbers.formatDecimal(movi.pagamento, 1, 'DEFAULT', 2, 'DEFAULT')}"></span></td>
+								<td><a data-toggle="tooltip" data-placement="top" title="Editar Movimentação" th:href="@{/financeiro/movimentacao/editar/{id}(id = ${movi.id})}" ><i class="fas fa-edit jef-icones-tabelas-edit"></i></a></td>
+								<!--  <td><a data-toggle="tooltip" data-placement="top" title="Excluir Funcionário"th:href="@{/deletarFunc/{cd}(cd = ${func.cd})}" ><i class="fas fa-user-times jef-icones-tabelas-remove"></i></a></td>-->
+								<td><a data-toggle="tooltip" data-placement="top" title="Excluir Movimentação" th:onclick ="showModalAviso('Tem certeza que deseja excluir esse lançamento:', [[${movi.descricao}]],'/financeiro/deletarMovimentacao/[[${movi.id}]]')"><i class="fas fa-trash-alt jef-icones-tabelas-remove"></i></a>
+							
+							</tr>
+						</tbody>
+					</table>
+					</div><!-- script modal aviso customizado -->
+	<th:block th:replace="fixos/componentes :: modal_aviso"></th:block>		
+	
+	<script th:inline="javascript">
+	function redirClk(link){ window.location.href = link}
+	var a = /*[[${movimentacoes}]]*/ 'a'
+		console.log(a);
+	</script>				
+</html>				

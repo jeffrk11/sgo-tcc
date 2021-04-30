@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head th:replace="fixos/layout :: head(~{ :: .titulo},~{})">
+<meta charset="UTF-8">
+<title class="titulo">Novo Lançamento</title>
+
+</head>
+
+<body>
+	<th:block th:include="fixos/layout :: esqueleto(~{ :: .conteudo})">
+		<!-- conteudo da pagina dentro do esqueleto -->
+		<th:block class="conteudo">
+		
+		<div class="d-flex justify-content-center w-100 p-4">
+			<form class="w-100" id="form" method="POST">
+				<!-- card obra-->
+				<th:block th:replace="financeiro/cards :: card_movimentacao"></th:block>
+				<!-- card vinculacao-->
+				<th:block th:replace="financeiro/cards :: card_vincular"></th:block>
+				
+				<!-- botoes formulario -->
+				<div class="d-flex justify-content-around mt-2">
+					<button type="submit" id="btn_cadastrar"
+						class="btn btn-outline-success btn-lg">Cadastrar</button>
+					<button type="button" class="btn btn-outline-danger btn-lg"
+						href="#" onclick="history.go(-1)">Cancelar</button>
+				</div>
+			</form>
+		</div>
+		</th:block>
+	</th:block>
+	
+	<!-- script modal aviso customizado -->
+	<th:block th:replace="fixos/componentes :: modal_aviso"></th:block>	
+	<!-- modal aviso -->
+	<th:block th:replace="fixos/layout ::modal_aviso_redirecionamento('Cadastro de Funcionário','Redirecionando a tela de funcionários')"></th:block>
+	<!-- scripts globais para o site -->
+	<th:block th:replace="fixos/layout :: scripts"></th:block>
+	
+	<!-- script dessa pagina -->
+	<th:blobk th:include="financeiro/scriptFinanceiro"></th:blobk>
+	<!-- mini card pesquisar obra script -->
+	<th:block th:include="funcionarios/scriptFuncionario :: script_mini_card_pesquisar_obras"></th:block>
+	<!-- mini card pesquisar funcionario script -->
+	<th:block th:include="obra/scriptObra :: script_mini_card_pesquisar_funcionarios"></th:block>
+
+	
+	<!-- ajax post -->
+	<script th:inline="javascript">
+	$('#form').submit(function(e) {
+		e.preventDefault();
+		//movimentacao vazio apenas para auxiliar na geracao do json automatico
+		var movi = /*[[${movimentacao}]]*/ '';
+		var linkpost = /*[[${linkPost}]]*/ 'link';
+		var linktipo = /*[[${linkTipo}]]*/ 'tipo';
+		var auxID = movi.id;
+
+		var dados = JsonAutomatico(movi, {
+												situacao: $("input[type='radio'][name='situacao']:checked").val(),
+												tipo: $("input[type='radio'][name='tipo']:checked").val() });
+		dados.vinculados = vinculados;
+		dados.tipoVinculado = tipoVinc;
+		dados.id = linktipo === "POST" ? 0 : auxID;
+		console.log(dados);
+		$.ajax({
+			type : linktipo,
+			datatype : "json",
+			url : linkpost,
+			data : dados,
+			success: function(response){
+			    	showModalAviso('Redirecionando a tela de consulta',undefined,undefined,'fa-file-invoice-dollar','#82f03a',false);	
+			    	setTimeout(function() { location.href = "/financeiro/consultar"}, 1200);
+			    },
+			error: function(e){
+			    	alert("error "+e);
+			    }
+		});
+	
+	});
+	</script>
+</body>
+
+</html>

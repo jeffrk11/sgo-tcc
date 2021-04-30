@@ -1,0 +1,83 @@
+<!-- para palavras pt-br -->
+<meta charset="UTF-8">
+<!--  card obra, utilizado no cadastro e na atualizacao -->
+<th:block th:fragment="modal_aviso">
+	<!-- modal aviso -->
+	<div class="modal fade" id="modal-aviso" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered modal " >
+			<div class="modal-content p-0 rounded-4" style="background-color: rgb(14,28,47)">
+					<div id = "head_modal_aviso" class="row lign-items-start justify-content-center m-0 rounded-4-top">
+						<i id="icon_modal_aviso" class="fas fa-exclamation-circle fa-6x p-3" style="color: rgb(14,28,47)"></i>
+					</div>
+					<div class="row p-2 m-0 lign-items-start justify-content-center">
+						<h2 style="color: rgb(255,255,255)" >Aviso!</h2>
+					</div>
+					<div class="row p-2 m-0 lign-items-start justify-content-center">
+						<div class="d-flex flex-column">
+							<h5 style="text-align: center; color: rgb(255,255,255)" id="aviso_txt" class="mb-2"></h5>
+							<h5 style="text-align: center; color: rgb(255,255,255)" id="var_txt"></h5>
+						</div>
+					</div>
+					<div class="row p-2 m-2 lign-items-start justify-content-center">
+						<div class="d-flex flex-row justify-content-around w-100">
+							<button id="btn_modal_aviso_no" type="button" class="btn btn-outline-danger btn-lg  align-self-end  pl-4 pr-4">Não</button>
+							<a id="btn_modal_aviso_si" type="button" class="btn btn-outline-success btn-lg  align-self-end pl-4 pr-4 ">Sim</a>
+						</div>	
+					</div>
+			</div>
+		</div>
+	</div>
+
+<script th:inline="javascript">
+		//SCRIPT EXCLUSIVO PARA MODAL DE AVISOS
+		function showModalAviso(aviso,vartxt = "",hrefsi ="", icone = 'fa-exclamation-circle', cor = '#fc5044',btns = true, btn_ok = false){
+			//texto aviso
+			document.getElementById("aviso_txt").innerHTML = aviso;
+			//texto diferente
+			document.getElementById("var_txt").innerHTML = vartxt;
+			//icone do aviso
+			document.getElementById("icon_modal_aviso").setAttribute("class","fas "+ icone +" fa-6x p-3");
+			//head aviso
+			document.getElementById("head_modal_aviso").style.backgroundColor = cor;
+			$('#modal-aviso').modal('show');
+			
+			$(document).on('click', '#btn_modal_aviso_no', function(){ 
+				$('#modal-aviso').modal('hide');
+			});
+			if(btns){
+				document.getElementById("btn_modal_aviso_si").setAttribute("href", hrefsi);
+			
+				
+			}else{
+				document.getElementById("btn_modal_aviso_si").style.display = "none";
+				document.getElementById("btn_modal_aviso_no").style.display = "none";
+			}
+			if(btn_ok){
+				document.getElementById("btn_modal_aviso_no").innerHTML = "Ok";
+				document.getElementById("btn_modal_aviso_no").style.display = "block";
+				document.getElementById("btn_modal_aviso_no").style.color = cor;
+				document.getElementById("btn_modal_aviso_no").style.borderColor = cor;
+			}
+		}		
+	</script>			
+</th:block>
+
+<th:block th:fragment="modal_info">
+	<div class="modal fade" id="modal_info" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
+			<div class="modal-content">
+				<div class="modal-header" id="modal_info_head" style="background-color: rgb(14,28,47)">
+					<h5 id="modal_titulo_head"class="jef-card-titulo fs-1 m-2" style=" color: white">Informação detalhada do </h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" id="modal_info_body" style="background-color: rgb(14,28,47)">
+
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>

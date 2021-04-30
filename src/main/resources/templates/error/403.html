@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head th:replace="fixos/layout :: head(~{ :: .titulo}, ~{ :: .script})">
+<meta charset="UTF-8">
+<title class="titulo">DashBoard</title>
+<!-- graficos dashboard -->
+<script
+	class="script"
+	src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"
+	integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
+	crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+	<th:block th:include="fixos/layout :: esqueleto(~{ :: .conteudo})">
+		<!-- conteudo da pagina dentro do esqueleto -->	
+		<th:block class="conteudo">
+			<div class="d-flex flex-column"> 
+				<!-- conteudo da pagina aqui -->
+				<div class="card" id="modal-aviso" tabindex="-1">
+					<div class="modal-dialog modal-dialog-centered modal ">
+						<div class="modal-content p-0 rounded-4"
+							style="background-color: rgb(14, 28, 47)">
+							<div id="head_modal_aviso"
+								class="row lign-items-start justify-content-center m-0 rounded-4-top">
+								<i id="icon_modal_aviso"
+									class="fas fa-exclamation-circle fa-6x p-3"
+									style="color: rgb(14, 28, 47)"></i>
+							</div>
+							<div class="row p-2 m-0 lign-items-start justify-content-center">
+								<h2 style="color: rgb(255, 255, 255)">Aviso!</h2>
+							</div>
+							<div class="row p-2 m-0 lign-items-start justify-content-center">
+								<div class="d-flex flex-column">
+									<h5 style="text-align: center; color: rgb(255, 255, 255)"
+										id="aviso_txt" class="mb-2"></h5>
+									<h5 style="text-align: center; color: rgb(255, 255, 255)"
+										id="var_txt"></h5>
+								</div>
+							</div>
+							<div class="row p-2 m-2 lign-items-start justify-content-center">
+								<div class="d-flex flex-row justify-content-around w-100">
+									<button id="btn_modal_aviso_no" type="button"
+										class="btn btn-outline-danger btn-lg  align-self-end  pl-4 pr-4">Não</button>
+									<a id="btn_modal_aviso_si" type="button"
+										class="btn btn-outline-success btn-lg  align-self-end pl-4 pr-4 ">Sim</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--  fim conteudo -->
+			</div>
+		</th:block>
+	</th:block>
+	<!-- script modal aviso customizado -->
+	<th:block th:replace="fixos/componentes :: modal_aviso"></th:block>	
+	<th:block th:replace="fixos/layout :: scripts"></th:block>
+	<!-- script da pagina  -->
+
+</body>
+</html>

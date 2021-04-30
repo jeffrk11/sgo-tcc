@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head th:replace="fixos/layout :: head(~{ :: .titulo},~{})">
+<meta charset="UTF-8">
+<title class="titulo">Cadastrar Obra</title>
+
+</head>
+
+<body>
+	<th:block th:include="fixos/layout :: esqueleto(~{ :: .conteudo})">
+		<!-- conteudo da pagina dentro do esqueleto -->	
+		<th:block class="conteudo">
+			<form id="form">
+				<!-- <th:block th:include="mensagemValidacao"></th:block> -->
+				<!-- card obra-->
+				<th:block th:replace="obra/cards :: card_obra"></th:block>
+
+				<!-- card Equipes -->
+				<th:block th:replace="obra/cards :: card_equipe"></th:block>
+
+				<!-- btns form -->
+				<div class="d-flex justify-content-around mt-2 mb-5">
+					<button type="submit" id="btn_cadastrar"
+						class="btn btn-outline-success btn-lg">Cadastrar</button>
+					<button type="button" id="btn_cancelar"
+						class="btn btn-outline-danger btn-lg">Cancelar</button>
+
+				</div>
+			</form>
+		</th:block>
+	</th:block>
+	
+	<!-- modal info funcionario -->
+	<th:block th:include="obra/cards :: modal_info"></th:block>
+	<!-- script modal aviso customizado -->
+	<th:block th:replace="fixos/componentes :: modal_aviso"></th:block>	
+	<!-- modal aviso -->
+	<th:block th:replace="fixos/layout ::modal_aviso_redirecionamento('Cadastro Obra','Redirecionando para tela de obras')"></th:block>
+	<!-- scripts globais para o site -->
+	<th:block th:replace="fixos/layout :: scripts"></th:block>
+	<!--  scripts para a pagina -->
+	<th:block th:replace="obra/scriptObra :: script"></th:block>
+	<!-- enviar formulario via ajax -->
+	<script th:inline="javascript">
+	jQuery(document).ready(function($){
+		$('#form').submit(function (e) {
+			  e.preventDefault();
+			
+			var controles = /*[[${controles}]]*/ '';
+			if(validarControleObra($("input[name=controle]").val(),controles)){
+			//funcionarios da equipe
+			var cds= getIDsFuncionarios(funcionarios_obra);
+			
+			//obra vazio apenas para auxiliar na geracao do json automatico
+			var obra = /*[[${obra}]]*/ '';
+			//cd é gerado automaticamente no back n é necessário definir
+			delete obra['cd'];	
+			delete obra['funcionarios'];
+			
+			//var dados = JsonAutomatico(obra, {myArray: cds });
+			$.ajax({
+			    type : "POST",
+			    url : "/obras/cadastrarObraPost",
+			    datatype: "json",
+			    data : 
+			    	//valores serao passados pela url em um metodo post, n pode ficar vazio se n o spring n sabe qual pegar e deixa null
+			        //pegando os dados dos inputs automaticamente e colocando num json, facilita quando é necessário adicionar novos atributos ao func
+			    	JsonAutomatico(obra, {myArray: cds })
+			    ,
+			    success: function(response){
+			    	showModalAviso('Redirecionando a tela de obras',undefined,undefined,'fa-industry','#82f03a',false);	
+			    	setTimeout(function() { location.href = "/obras/lista"}, 1200);
+			    },
+			    error: function(e){
+			    	alert("error");
+			    }					
+			}); 
+			}
+		});
+	});
+	</script>	
+	
+</body>
+</html>

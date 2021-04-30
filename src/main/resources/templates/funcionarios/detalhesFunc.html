@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head th:replace="fixos/layout :: head(~{ :: .titulo},~{})">
+<meta charset="UTF-8">
+<title class="titulo">Detalhes Funcionário</title>
+
+</head>
+
+<body>
+
+	<th:block th:include="fixos/layout :: esqueleto(~{ :: .conteudo})">
+		<!-- conteudo da pagina dentro do esqueleto -->
+		<th:block class="conteudo">
+			<form id="form" method="PUT" th:action="@{/saveDetalhesFuncionario}"
+				th:object="${func}">
+				<!-- card funcionario-->
+				<th:block th:replace="funcionarios/cards :: card_funcionario"></th:block>
+				<!-- card financeiro-->
+				<th:block th:replace="funcionarios/cards :: card_dados_financeiros"></th:block>
+				<!-- card dados pessoais-->
+				<th:block th:replace="funcionarios/cards :: card_dados_pessoais"></th:block>
+				<!-- card Obras trabalhadas -->
+				<th:block th:replace="funcionarios/cards :: card_obras"></th:block>
+
+				<!-- botoes formulario -->
+				<div class="d-flex justify-content-around mt-2">
+					<button type="submit" id="btn_cadastrar"
+						class="btn btn-outline-success btn-lg">Atualizar</button>
+					<button type="button" class="btn btn-outline-danger btn-lg"
+						href="#" onclick="history.go(-1)">Cancelar</button>
+				</div>
+			</form>
+		</th:block>
+	</th:block>
+	
+	<!-- modal info obra -->
+	<th:block th:include="funcionarios/cards :: modal_info"></th:block>
+	<!-- script modal aviso customizado -->
+	<th:block th:replace="fixos/componentes :: modal_aviso"></th:block>	
+	<!-- modal aviso -->
+	<th:block th:replace="fixos/layout ::modal_aviso_redirecionamento('Detalhes Funcionário','Redirecionando a tela de funcionários')"></th:block>
+	<!-- scripts globais para o site -->
+	<th:block th:replace="fixos/layout :: scripts"></th:block>
+	<!--  scripts para a pagina -->
+	<th:block th:replace="funcionarios/scriptFuncionario :: script"></th:block>
+	<!-- enviar formulario via ajax -->
+	<script th:inline="javascript">
+	jQuery(document).ready(function($) {
+		$('#form').submit(function(e) {
+			e.preventDefault();						
+			
+			var cds_funcs = /*[[${cds_funcs}]]*/ '';
+			//remove o cd desse funcionario ja q isso é uma atualizacao e pode ter o mesmo codigo
+			cds_funcs.splice(cds_funcs.indexOf(String(func.cd)),1);
+			//validar se existe algum funcionario com o mesmo codigo pra n duplicar 
+			if(validarCodigoFunc($("input[name=cd]").val(),cds_funcs)){
+			//obras do funcionario
+			var cds = getCodigosFuncs(obras_funcionario);
+			
+			//var dados = JsonAutomatico(func, {myArray: cds , id: func.id });		
+			console.log("enviando para o json automatico ");
+				
+			var dados = JsonAutomatico(func, {myArray: cds , id: func.id, perfil: foto, nota: func.nota}); 
+			
+			
+			console.log(dados);
+			$.ajax({
+				type : "PUT",
+				datatype : "json",
+				url : "/funcionarios/saveFunc",
+				//valores serao passados pela url em um metodo put, n pode ficar vazio se n o spring n sabe qual pegar e deixa null				
+				data : dados,
+				
+				success : function(response) {
+					showModalAviso('Redirecionando a tela de funcionários',undefined,undefined,'fa-user-check','#82f03a',false);
+					setTimeout(function() {
+						location.href = "/funcionarios/lista"
+					}, 1200);
+				},
+				error : function(e) {
+					alert("error");
+				}
+			});
+		}//fim if
+		});
+	});
+	
+	
+	</script>
+</body>
+
+</html>

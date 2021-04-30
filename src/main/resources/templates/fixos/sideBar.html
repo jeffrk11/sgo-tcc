@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html
+lang="pt"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:th="http://thymeleaf.org">
+
+<div class="sticky-top d-flex flex-column align-items-start pl-3 " style="background-color: RGB(6,19,37); z-index: 3">
+	<div >
+		<div class="d-flex flex-column align-items-start" >
+			<!--logo exemplo-->
+			<img class="w-100 pr-4 p-2 align-self-start"		
+				src="/imgs/ajvlogo.png"
+				alt="logo" />
+			<!--  ideia	
+			<div class="d-flex flex-column w-100 justify-content-center align-items-center p-1 mb-2">
+				<img class="rounded-circle m-2" src="https://siga.cps.sp.gov.br/image//8XM63YKE2BKY6RKKS7KPZ5RQ6TKWU2.TMB.JPG"
+					 style="background-color: gray; width: 86px; height: 86px">
+				<h6 style="color: rgb(22, 74, 71)"> Jeferson Soares de Souza</h6>
+	             <span style="color: rgb(22, 74, 71)"> Técnico de informática</span>
+			</div>-->
+			<!-- obras colapse side bar -->
+			<a class="linksjef" href="/"
+				style="text-decoration: none;"> <i class="fas fa-chart-pie"></i> <span>DashBoard</span>
+			</a>
+			
+			<!-- funcionarios colapse side bar -->
+			<a class="linksjef" data-toggle="collapse" href="#funcCollapse"
+				style="text-decoration: none;"> <i class="fas fa-users"></i> <span>Funcionários</span>
+			</a>
+			<ul style="list-style-type: none;" class="collapse mb-0" id="funcCollapse">
+				<li><a href="/funcionarios/lista" class="linksjef">Listagem </a></li>
+				<li><a href="/funcionarios/cadastrarFunc" class="linksjef">Cadastrar </a></li>
+			</ul>
+	
+			<!-- obras colapse side bar -->
+			<a class="linksjef" data-toggle="collapse" href="#obraCollapse"
+				style="text-decoration: none;"> <i class="fas fa-industry"></i> <span>Obras</span>
+			</a>
+			<ul style="list-style-type: none;" class="collapse mb-0" id="obraCollapse">
+				<li><a href="/obras/lista" class="linksjef">Listagem </a></li>
+				<li><a href="/obras/cadastrarObra" class="linksjef">Cadastrar </a></li>
+			</ul>
+			
+			<!-- financeiro colapse side bar -->
+			<a class="linksjef" data-toggle="collapse" href="#financeiroCollapse"
+				style="text-decoration: none;"><i class="fas fa-file-invoice-dollar"></i> <span>Financeiro</span>
+			</a>
+			<ul style="list-style-type: none;" class="collapse mb-0" id="financeiroCollapse">
+				<li><a href="/financeiro/movimentacao/lancar" class="linksjef">Lançar </a></li>
+				<li><a href="/financeiro/consultar" class="linksjef">Consultar </a></li>
+				<li><a href="#" class="linksjef">Relatório </a></li>
+			</ul>
+		
+		</div>
+	</div>
+</div>
+
+</html>

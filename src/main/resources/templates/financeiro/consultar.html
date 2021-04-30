@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head th:replace="fixos/layout :: head(~{ :: .titulo},~{})">
+<meta charset="UTF-8">
+<title class="titulo">Novo Lançamento</title>
+
+</head>
+
+<body>
+	<th:block th:include="fixos/layout :: esqueleto(~{ :: .conteudo})">
+		<!-- conteudo da pagina dentro do esqueleto -->
+		<th:block class="conteudo">
+		
+		<div class="d-flex justify-content-center w-100">
+				
+			<!-- card Pesquisar -->
+            <div
+              class="card w-100 mt-2 p-2"
+              style="background-color: rgb(14,28,47)"
+            >
+              <!--titulo card-->
+              <h6 class="jef-card-titulo">Pesquisar Lançamento</h6>
+
+              <div class="row align-items-center justify-content-around p-2">
+                <div class="col-xl-1 col-md-8 align-self-start mt-2 mr-xl-4">
+                  	<div class="row no-gutters justify-items-start mb-4">
+						<i class="fas fa-search fa-5x" style="color: rgb(6, 19, 37)"></i>
+					</div>
+                  <div class="row no-gutters justify-content-between">
+                    <!-- vazio por enquanto-->
+                  </div>
+                </div>
+                <!--coluna direita form-->
+                <div class="col-xl-8 col-md-8">
+                  <div class="row no-gutters justify-content-between">
+                    <!--codigo-->
+						<div class="form-group col-xl-12 col-12 pr-xl-2">
+							<label for="search-descricao " class="jef-card-text-item">Descrição</label>
+							<input autocomplete="off" type="text" id="search-descricao" class="form-control jef-input-escuro search-input" placeholder="ex: conta de luz" />
+						</div>
+					<!--Categorias-->
+	                    <div class="form-group col-xl-4 col-12 pr-xl-2">
+	                      <label class="jef-card-text-item" for="model-categoria">Categoria</label>
+							<select name="categoria" class="form-control jef-input-escuro search-input"	id="search-categoria">
+							<!--  automatico pegando do ENUM -->
+							<option th:each="c : ${categorias}" th:text="${c}"></option>
+						</select>
+	                    </div>
+	                   <!--Tipos-->
+	                    <div class="form-group col-xl-4 col-12 pr-xl-2">
+	                      	<label class="jef-card-text-item" for="search-tipo">Tipo</label>
+							<select name="tipo" class="form-control jef-input-escuro search-input"	id="search-tipo">
+								<!--  automatico pegando do ENUM -->
+								<option th:each="c : ${tipos}" th:text="${c}"></option>
+							</select>
+	                    </div>
+	                    <!-- valor-->
+						<div class="form-group col-xl-4 col-12">
+							<label for="search-valor" class="jef-card-text-item">Valor</label>
+							<input id="search-valor" name="search-valor" type="number" autocomplete="off" class="form-control jef-input-escuro search-input"placeholder="ex: 100" />
+						</div>
+                  </div>
+                </div>
+              </div>
+            	<!-- fragmento dinamico para visualizar busca -->
+            	<div class="row no-gutters w-100">
+					<div class="w-100 pt-2" id="resultsBlock">
+						<div id="lista" th:fragment="resultsList" th:insert="financeiro/list_movimentacoes_frag" ></div>
+					</div>
+				</div>
+            </div>
+			
+		</div>
+		</th:block>
+	</th:block>
+	<!-- script modal aviso customizado -->
+	<th:block th:replace="fixos/componentes :: modal_aviso"></th:block>	
+	<!-- modal aviso -->
+	<th:block th:replace="fixos/layout ::modal_aviso_redirecionamento('Cadastro de Funcionário','Redirecionando a tela de funcionários')"></th:block>
+	<!-- scripts globais para o site -->
+	<th:block th:replace="fixos/layout :: scripts"></th:block>
+
+	<!-- script adicional para a pagina -->
+	<script>
+	//consulta no banco sem recarregar a pagina
+	//adicionando opcao sem nada para pesquisa
+		$("#search-tipo").prepend("<option value='' selected='selected'></option>");
+		$("#search-categoria").prepend("<option value='' selected='selected'></option>");
+	
+		$( ".search-input" ).change(function() {
+			pesquisarMovimentacaoFrag();
+		});
+		$( ".search-input" ).keyup(function() {
+			pesquisarMovimentacaoFrag();
+		});
+
+	
+	function pesquisarMovimentacaoFrag(){
+		//definindo a url padrão para auxiliar na pesquisa
+		var url = '/financeiro/pesquisar';
+		//lança um request no fragmento q é mapeado para buscar no banco, adicionando um requestparam para o cargo
+		url = url + '?descricao=' + encodeURI($('#search-descricao').val() +
+				'&categoria='+$("#search-categoria").val() +
+				'&tipo='+$("#search-tipo").val() +
+				'&valor='+$("#search-valor").val());
+		$('#resultsBlock').load(url);
+
+	}
+	</script>
+
+</body>
+
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head th:replace="fixos/layout :: head(~{ :: .titulo},~{})">
+<meta charset="UTF-8">
+<title class="titulo">Cadastrar Funcionário</title>
+
+</head>
+
+<body>
+	<th:block th:include="fixos/layout :: esqueleto(~{ :: .conteudo})">
+		<!-- conteudo da pagina dentro do esqueleto -->
+		<th:block class="conteudo">
+
+			<form id="form" method="POST">
+				<!-- card funcionario-->
+				<th:block th:replace="funcionarios/cards :: card_funcionario"></th:block>
+				<!-- card financeiro-->
+				<th:block th:replace="funcionarios/cards :: card_dados_financeiros"></th:block>
+				<!-- card dados pessoais-->
+				<th:block th:replace="funcionarios/cards :: card_dados_pessoais"></th:block>
+				<!-- card Obras trabalhadas -->
+				<th:block th:replace="funcionarios/cards :: card_obras"></th:block>
+				<!-- botoes formulario -->
+				<div class="d-flex justify-content-around mt-2">
+					<button type="submit" id="btn_cadastrar"
+						class="btn btn-outline-success btn-lg">Cadastrar</button>
+					<button type="button" class="btn btn-outline-danger btn-lg"
+						href="#" onclick="history.go(-1)">Cancelar</button>
+				</div>
+			</form>
+			
+		</th:block>
+	</th:block>
+	
+	<!-- modal info obra -->
+	<th:block th:include="funcionarios/cards :: modal_info"></th:block>
+	<!-- script modal aviso customizado -->
+	<th:block th:replace="fixos/componentes :: modal_aviso"></th:block>	
+	<!-- modal aviso -->
+	<th:block th:replace="fixos/layout ::modal_aviso_redirecionamento('Cadastro de Funcionário','Redirecionando a tela de funcionários')"></th:block>
+	<!-- scripts globais para o site -->
+	<th:block th:replace="fixos/layout :: scripts"></th:block>
+	<!--  scripts para a pagina -->
+	<th:block th:replace="funcionarios/scriptFuncionario :: script"></th:block>
+	<!-- enviar formulario via ajax -->
+	<script th:inline="javascript">
+	
+	jQuery(document).ready(function($) {
+		//definindo cd sugerido pelo programa
+		$('#model-cd').val(/*[[${cdMax}]]*/ 'max');
+	
+		$('#form').submit(function(e) {
+			e.preventDefault();
+			var cds_funcs = /*[[${cds_funcs}]]*/ '';
+			
+			if(validarCodigoFunc($("input[name=cd]").val(),cds_funcs)){
+			//obras do funcionario
+			var cds = getCodigosFuncs(obras_funcionario);
+			
+			//func vazio apenas para auxiliar na geracao do json automatico
+			var func = /*[[${func}]]*/ '';
+			//id é gerado automaticamente no back n é necessário definir, entao eh deletado do obj
+			delete func['id'];
+			//nao consigo passar a img com os bytes entao uso uma variavel auxiliar para passar o array de bytes
+			func['img'] = [0];
+
+			console.log("enviando para o json automatico ");
+			//pegando os dados dos inputs automaticamente e colocando num json, facilita quando é necessário adicionar novos atributos ao func
+			var dados = JsonAutomatico(func, {myArray: cds, perfil : foto, nota: func.nota});
+			
+			console.log(dados);
+			
+			$.ajax({
+				type : "POST",
+				datatype : "json",
+				url : "/funcionarios/cadastrarFunc",
+				data : 
+					//valores serao passados pela url em um metodo put, n pode ficar vazio se n o spring n sabe qual pegar e deixa null
+					//pegando os dados dos inputs automaticamente e colocando num json, facilita quando é necessário adicionar novos atributos ao func
+					dados
+					
+				,
+				success : function(response) {
+					//implementar modal customizado
+					//$('#modal_ok').modal('show');
+					showModalAviso('Redirecionando a tela de funcionários',undefined,undefined,'fa-user-check','#82f03a',false);
+					setTimeout(function() {
+						location.href = "/funcionarios/lista"
+					}, 1200);
+				},
+				error : function(e) {
+					alert("error");
+				}
+			});
+			}//fim if
+		});
+	});
+	</script>
+	
+
+</body>
+
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head  th:replace="fixos/layout :: head(~{ :: .titulo},~{})">
+<meta charset="UTF-8">
+<title class="titulo">Listagem Funcionários</title>
+
+</head>
+<body>
+	<!--barra fixa em cima user-->
+	<th:block th:include="fixos/navBar"></th:block>
+	
+	<div class="row no-gutters">
+		<div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+			<!--side bar-->
+			<th:block th:include="fixos/sideBar"></th:block>
+		</div>
+		<div class="col-md-9 ml-sm-auto col-lg-10 px-md-4 j-main">
+			<!-- conteudo da pagina aqui -->
+			<div class="d-flex flex-column justify-content-center w-100 p-4">
+			
+			<!-- card Pesquisar -->
+            <div
+              class="card w-100 mt-2 p-2"
+              style="background-color: rgb(14,28,47)"
+            >
+              <!--titulo card-->
+              <h6 class="jef-card-titulo">Pesquisar funcionário</h6>
+
+              <div class="row align-items-center justify-content-around p-2">
+                <div class="col-xl-1 col-md-8 align-self-start mt-2 mr-xl-4">
+                  <div
+                    class="row no-gutters justify-items-start mb-4"
+                  >
+                    <i
+                      class="fas fa-search fa-5x "
+                      style="color: rgb(6, 19, 37)"
+                    ></i>
+                  </div>
+                  <div class="row no-gutters justify-content-between">
+                    <!-- vazio por enquanto-->
+                  </div>
+                </div>
+                <!--coluna direita form-->
+                <div class="col-xl-8 col-md-8">
+                  <div class="row no-gutters justify-content-between">
+                    <!--codigo-->
+                    <div class="form-group col-xl-2 col-12 pr-xl-2">
+                      <label
+                        for="formGroupExampleInput "
+                        class="jef-card-text-item"
+                        >Código</label
+                      >
+                      <input
+                        autocomplete="off"
+                        type="number"
+                        id="searchCD"
+                        class="form-control jef-input-escuro"
+                        placeholder="ex: 123"
+                      />
+                    </div>
+                    <!-- Nome-->
+                    <div class="form-group col-xl-6 col-12 pr-xl-2">
+                      <label
+                        for="formGroupExampleInput2"
+                        class="jef-card-text-item"
+                        >Nome</label
+                      >
+                      <input
+                      	id="searchName" 
+                      	name="searchName"
+                        type="text"
+                        autocomplete="off"
+                        class="form-control jef-input-escuro"
+               
+                        placeholder="ex: Fulano"
+                      />
+                    </div>
+                    <!--Cargo-->
+                    <div class="form-group col-xl-4 col-12 pr-xl-2">
+                      <label
+                        for="formGroupExampleInput "
+                        class="jef-card-text-item"
+                        >Cargo</label
+                      >
+                      <input
+                        type="text"
+                        autocomplete="off"
+                        min="0"
+                        step="any"
+                        class="form-control jef-input-escuro"
+                        id="searchCargo"
+                        th:name="cargo"
+                        placeholder="ex: Mecânico"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            	<!-- fragmento dinamico para visualizar busca -->
+            	<div class="row no-gutters w-100">
+					<div class="w-100 pt-2" id="resultsBlock">
+						<div id="lista" th:fragment="resultsList" th:insert="funcionarios/list_funcs_frag" ></div>
+					</div>
+				</div>
+            </div>
+			
+			</div>
+			<!--  fim conteudo -->
+		</div>
+	</div>
+	<!-- scripts globais -->
+	<th:block th:replace="fixos/layout :: scripts"></th:block>
+	
+	<!-- modal aviso -->
+	
+	<!-- script adicional para a pagina -->
+	<script>
+	//consulta no banco sem recarregar a pagina
+	
+		$( "#searchName" ).keyup(function() {
+			pesquisarFuncFragmento();
+		});
+		$( "#searchCargo" ).keyup(function() {
+			pesquisarFuncFragmento();
+		});
+		$( "#searchCD" ).keyup(function() {
+			pesquisarFuncFragmento();
+		});
+	
+	function pesquisarFuncFragmento(){
+		//definindo a url padrão para auxiliar na pesquisa
+		var url = '/funcionarios/pesquisar';
+		//lança um request no fragmento q é mapeado para buscar no banco, adicionando um requestparam para o cargo
+		url = url + '?nome=' + $('#searchName').val()+ "&cargo="+$('#searchCargo').val()+ "&cd="+$('#searchCD').val();
+		$('#resultsBlock').load(url);
+
+	}
+	</script>
+	
+	<script th:inline="javascript">
+		//var x = 
+		console.log(/*[[${funcionarios}]]*/ 'func');
+	</script>	
+</body>
+</html>

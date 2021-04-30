@@ -1,0 +1,364 @@
+<head th:fragment="head(titulo,script)">
+	<meta charset="UTF-8">
+	<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+	<!-- Bootstrap CSS -->
+
+	<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous" />
+	<!-- font-->
+	<script src="https://kit.fontawesome.com/9bfa376dbe.js"
+	crossorigin="anonymous"></script>
+	
+	<title th:replace="${titulo}">layout</title>
+	
+	<script th:replace="${script}"></script>
+	<!-- css custom -->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/jef-style.css}"/>
+	<style>
+	/*ESTRELAS PONTO*/
+	.estrela-ponto:hover{  
+	-webkit-animation: text-pop-up-top 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	        animation: text-pop-up-top 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;   
+	}
+	.estrela-ponto:active{
+	-webkit-animation: sizing-peq 0.5s both;
+	        animation: sizing-peq 0.5s both; 
+	}						
+/**
+ * ----------------------------------------
+ * animation text-pop-up-top
+ * ----------------------------------------
+ */
+@-webkit-keyframes text-pop-up-top {
+  0% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+    text-shadow: none;
+  }
+  100% {
+    -webkit-transform: translateY(-20px);
+            transform: translateY(-20px);
+    -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+    text-shadow: 0 1px 0 #cccccc, 0 2px 0 #cccccc, 0 3px 0 #cccccc, 0 4px 0 #cccccc, 0 5px 0 #cccccc, 0 6px 0 #cccccc, 0 7px 0 #cccccc, 0 8px 0 #cccccc, 0 9px 0 #cccccc, 0 50px 30px rgba(0, 0, 0, 0.3);
+  }
+}
+@keyframes text-pop-up-top {
+  0% {
+    -webkit-transform: translateY(0);
+            transform: translateY(0);
+    -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+    text-shadow: none;
+  }
+  100% {
+    -webkit-transform: translateY(-5px);
+            transform: translateY(-5px);
+    -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+     
+  }
+}
+/**
+ * ----------------------------------------
+ * animation sizing-peq
+ * ----------------------------------------
+ */
+
+@keyframes sizing-peq {
+  0% {
+  	 transform: scale(1) ;
+	-webkit-transform: scale(1) ;
+	-moz-transform: scale(1) ;
+  }
+  100% {
+   transform: scale(0.7) ;
+	-webkit-transform: scale(0.7) ;
+	-moz-transform: scale(0.7) ;
+  }
+}	
+				
+			
+	</style>
+
+</head>
+
+
+<!--  modal para aviso de redirecionamento -->
+<th:block th:fragment="modal_aviso_redirecionamento(titulo, texto)">
+<div class="modal fade" id="modal_ok" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" th:text="${titulo}"></h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="spinner-border" role="status">
+						<p th:text="${texto}"></p>
+						<span class="sr-only">Loading...</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+
+
+<!-- scripts -->
+<th:block th:fragment="scripts">
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src=" https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous">
+	</script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous">
+	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous">
+	</script>
+	<script>
+	//funcoes globais auxiliares
+	//funcao criar btns icones
+		function criarBtnIcone(td = false , cla = "fas fa-frog jef-icones-tabelas", click = '#',id = "btn-icone", cursor = 'pointer'){
+			var icone = document.createElement("i");
+			icone.setAttribute('class',cla);
+			icone.setAttribute('id',id);
+			icone.style['cursor'] = cursor;
+			if(click != '#'){icone.setAttribute('onClick', click);}
+			if(td){
+				var coluna = document.createElement("td");
+				coluna.appendChild(icone);
+				return coluna;
+			}else{
+				return icone;
+			}
+		}
+	//funcao criar tabela
+	function criarTabela(tb_id , dados, ordem, btns = []){
+		console.log("desenhando tabela funcao global");
+		console.log(dados);
+		//pegando a referencia da tabela da pagina
+		var tb = document.getElementById(tb_id); 
+		//limpar tabela
+		tb.innerHTML = "";	
+		if(dados.length > 0){
+			for(var i = 0; i < dados.length; i++){
+				//linha
+				var row = document.createElement("tr");
+				//colunas
+				for (var j = 0; j < ordem.length; j++) {
+					//coluna
+					var coluna = document.createElement("td");
+					//escrevendo na coluna o texto do dados pelo nome da key ordem
+					console.log("dado a ser inserido: "+dados[i][ordem[j]]);
+					coluna.appendChild(document.createTextNode(dados[i][ordem[j]]));
+					//atributo global para pegar informacoes 
+					coluna.setAttribute('id', 'c-' + j);
+					//colocando a coluna na linha
+					row.appendChild(coluna);	
+					
+				}
+				//botoes se tiver na tabela		
+				console.log(btns)
+				for(b in btns){
+					var coluna = document.createElement("td");
+					var icone =  document.createElement("i");
+					//devido a algum bug do javascript tenho q clonar atributo por atributo
+					console.log('criar tabela: '+btns[b].getAttribute('onclick'));
+					if(btns[b].getAttribute('onclick') != null){
+						btns[b].setAttribute('onclick',(btns[b].getAttribute('onclick').substring(0,btns[b].getAttribute('onclick').lastIndexOf('(')+1))+dados[i].cd+')')
+					}
+					copyAttrs(icone,btns[b]);		
+					coluna.appendChild(icone);
+					row.appendChild(coluna);
+				}
+				//coloca linha na tabela
+				tb.appendChild(row);	
+			}
+		}
+		//retorna a tabela criada
+		return tb;
+	}
+	//clonar elementos copiando seus atributos um por um
+	 function copyAttrs(targt, sourc) { 
+         [...sourc.attributes].forEach(attr => { 
+             targt.setAttribute(attr.nodeName, attr.nodeValue) 
+         }) 
+     } 
+	//JSON automatico, requisito* os inputs precisam ter id = 'model-'
+	 function JsonAutomatico(obj, novaData = {}){		
+			var json = {}; 
+			console.log('nova data json')
+			console.log(novaData);
+			for(var i = 0; i < Object.keys(obj).length; i++){
+				//adicionar primeiramente pelo model-fun do front
+				json[Object.keys(obj)[i]] = $('#model-'+Object.keys(obj)[i]).val();
+			}
+			//depois de adicionar automaticamente tbm adicionar novaData caso haja
+			for(var i = 0; i < Object.keys(novaData).length; i++){
+				json[Object.keys(novaData)[i]] = novaData[Object.keys(novaData)[i]];
+			}
+			console.log('Json automatico');
+			console.log(json);
+			return json;
+		}
+	
+	//Funcao para converter uint8 em blob
+	async function uint8toblob(u8){		
+		var uint8 = new Uint8Array(u8);
+		var arrayBuffer = uint8.buffer;
+		//depois é convertido para o tipo blob
+		blob = new Blob([arrayBuffer],{ type: "image/jpeg" });
+		console.log(blob);
+		//depois é feito uma url para esse blob e assim ser mostrado por uma tag img
+		var urlCreator = window.URL || window.webkitURL;
+		var imageUrl = urlCreator.createObjectURL( blob );
+		console.log(imageUrl);
+		return imageUrl;
+		//document.getElementById("jef-img-funcionario-result").src = imageUrl;
+	}	
+	
+	async function blobToUint(blob){
+
+		return await new Response(blob).arrayBuffer();
+	}
+	
+	function getImageFromPc(file){
+		console.log("get image from pc");
+		if(file.size > 25000){
+			showModalAviso('Imagem maior do que 25 KB: ',file.name +'<br>'+(file.size/1000)+' KB' ,undefined,'fa-file-image','#edd537',false,true);
+		}else{
+		//var getImagePath = URL.createObjectURL(event.target.files[0]);
+		//retorna uma promessa ja que essa funcao é await para que espere a promessa ser cumprida, se não a imagem n tem tempo de ser carregada
+			return new Promise(  function (resolve, reject){
+				var fr = new FileReader();
+				 //pega o arquivo do computador no caso uma foto, e coloca isso num array de bytes
+				 fr.readAsArrayBuffer(file);
+				 //quando acabar de pegar o arquivo
+				 fr.onloadend =  function() {
+				    var buffer = fr.result;  
+				    //seleciona apenas o tipo uint8, trata cada byte do array como um numero separado de 0 a 255
+				    var aux = uint8ToBlobUrl(buffer)
+				 
+				    resolve({uint8: aux.uint8 ,blob: aux.blob, urlBlob: aux.urlBlob});
+				 }
+				 
+				 fr.onload = function(){
+					 console.log("carregado com sucesso");
+				 }
+			});
+		}
+	}
+	function uint8ToBlobUrl(arr){
+		
+		 uint8ArrayNew  = new Uint8Array(arr);	  
+		// uint8ArrayNew = Uint8Array.from(arr)
+		 var arrayBuffer = uint8ArrayNew.buffer;
+		 
+		 //depois é convertido para o tipo blob
+		 blob = new Blob([arrayBuffer],{ type: "image/jpeg" });	
+		 var urlCreator = window.URL || window.webkitURL;
+		 var imageUrl = urlCreator.createObjectURL( blob );
+		 console.log(imageUrl);
+
+	    return {uint8: uint8ArrayNew , blob: blob, urlBlob: imageUrl};
+	}
+	
+	function intToByte(array){
+		var byt=[];
+		for(var i in array){
+			byt.push(array[i]-128);
+		}
+		return byt;
+	}
+	function byteToInt(array){
+		var arr=[];
+		for(var i in array){
+			arr.push(array[i]+128);
+		}
+		return arr;
+	}
+	function base64ToArrayBuffer(base64) {
+	    var binary_string = window.atob(base64);
+	    //console.log("binary: "+binary_string);
+	    var len = binary_string.length;
+	    //console.log(len)
+	    var bytes = new Uint8Array(len);
+	    for (var i = 0; i < len; i++) {
+	        bytes[i] = binary_string.charCodeAt(i);
+	    }
+	    return bytes.buffer;
+	}
+	 
+	function setEstrelas(target_id){
+		var estrela_focada = false;
+		var container = document.getElementById('container-estrelas');
+		for(i = 0; i < container.children.length; i++){
+			container.children[i].style.color = "gray";
+			if(estrela_focada == false){
+				container.children[i].style.color = "yellow";
+			}
+			if(container.children[i].id == target_id){
+				estrela_focada = true;
+				nota_estrela = 1 + i;
+			}				
+		}
+	}
+	
+	function getEstrelas(){
+
+		var container = document.getElementById('container-estrelas');
+		for(i = 0; i < container.children.length; i++){
+			
+			if(container.children[i].style.color == 'gray'){
+				return i;
+			}
+		}
+		//se n achou gray eh pq todas estrelas estao selecionadas
+		return 5;
+	}
+	
+	</script>
+</th:block>
+
+<!-- esqueleto da pagina -->
+<th:block th:fragment="esqueleto(conteudo)">
+	<!--barra fixa em cima user-->
+	<th:block th:replace="fixos/navBar"></th:block>
+	
+	<div class="row no-gutters">
+		<div class="col-md-3 col-lg-2 d-md-block sidebar collapse jef-border-right" style="z-index: 2">
+			<!--side bar-->
+			<th:block th:include="fixos/sideBar"></th:block>
+		</div>
+		<div class="col-md-9 ml-sm-auto col-lg-10 px-md-4 j-main">
+			<!-- conteudo da pagina aqui -->
+			<div style="left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; z-index: 10;">
+				<!--Form funcionario-->
+				<div class="d-flex justify-content-center w-100 p-4">
+					
+					<!-- conteudo das paginas -->
+					<th:block th:replace="${conteudo}"></th:block>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>

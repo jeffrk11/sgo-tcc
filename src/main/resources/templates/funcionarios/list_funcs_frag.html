@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html
+lang="pt"
+xmlns="http://www.w3.org/1999/xhtml"
+xmlns:th="http://thymeleaf.org">
+
+<div th:fragment="resultsList">
+<label class="jef-card-text-item mb-2">Lista de funcionários</label>
+					<table class="table table-sm table-hover text-white">
+						<thead style="background-color: rgb(6, 19, 37); color: rgb(166, 255, 249)">
+							<tr>
+								<th>CD</th>
+								<th>Nome</th>
+								<th>Cargo</th>
+								<th>Situação</th>
+								<th>Salário</th>
+								<th>Admissão</th>
+								<th>Demissão</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr id="tr-funcs" class="jef-click" th:each="func : ${funcionarios}">
+								<td th:onclick="redirClk('/funcionarios/resumofunc/[[${func.id}]]')"><span th:text="${func.cd}"></span></td>
+								<td th:onclick="redirClk('/funcionarios/resumofunc/[[${func.id}]]')"><span th:text="${func.nome}"> </span></td>
+								<td th:onclick="redirClk('/funcionarios/resumofunc/[[${func.id}]]')"><span th:text="${func.cargo}"> </span></td>
+								<td th:onclick="redirClk('/funcionarios/resumofunc/[[${func.id}]]')"><span th:text="${func.situacao}"> </span></td>
+								<td th:onclick="redirClk('/funcionarios/resumofunc/[[${func.id}]]')"><span th:text="${'R$ '+ #numbers.formatDecimal(func.salario, 1, 'DEFAULT', 2, 'DEFAULT')}"> </span></td>
+								<td th:onclick="redirClk('/funcionarios/resumofunc/[[${func.id}]]')"><span th:text="${#dates.format(func.admissao, 'dd/MM/yyyy')}"> </span></td>
+								<td th:onclick="redirClk('/funcionarios/resumofunc/[[${func.id}]]')"><span th:text="${#dates.format(func.demissao, 'dd/MM/yyyy')}"> </span></td>
+								<td><a data-toggle="tooltip" data-placement="top" title="Editar Funcionário" th:href="@{/funcionarios/detalhe/{id}(id = ${func.id})}" ><i class="fas fa-user-edit jef-icones-tabelas-edit"></i></a></td>
+								<!--  <td><a data-toggle="tooltip" data-placement="top" title="Excluir Funcionário"th:href="@{/deletarFunc/{cd}(cd = ${func.cd})}" ><i class="fas fa-user-times jef-icones-tabelas-remove"></i></a></td>-->
+								<td><a data-toggle="tooltip" data-placement="top" title="Excluir Funcionário" th:onclick ="showModalAviso('Tem certeza que deseja excluir o funcionário:',[[${func.nome}]],'/funcionarios/deletarFunc/[[${func.id}]]')"><i class="fas fa-user-times jef-icones-tabelas-remove"></i></a>
+							
+							</tr>
+							<tr>
+						</tbody>
+					</table>
+					</div><!-- script modal aviso customizado -->
+	<th:block th:replace="fixos/componentes :: modal_aviso"></th:block>		
+	
+	<script th:inline="javascript">
+	function redirClk(link){ window.location.href = link}
+	</script>				
+</html>				

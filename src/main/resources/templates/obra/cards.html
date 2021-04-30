@@ -1,0 +1,242 @@
+<!-- para palavras pt-br -->
+<meta charset="UTF-8">
+<!--  card obra, utilizado no cadastro e na atualizacao -->
+<th:block th:fragment="card_obra">
+	<div class="card p-2 w-100 jef-card-cor">
+		<!--titulo card-->
+		<h6 class="jef-card-titulo">Obra</h6>
+
+		<div class="row align-items-center justify-content-center">
+			<div class="col-xl-2 col-md-8 align-self-start mt-2 mr-xl-4">
+				<div class="row no-gutters justify-content-center mb-4">
+					<i class="fas fa-industry fa-7x jef-card-icone-cor"></i>
+				</div>
+				<div class="row no-gutters justify-content-between">
+					<!-- codigo -->
+					<div class="form-group col-5 col-xl-12">
+						<label for="formGroupExampleInput " class="jef-card-text-item">Controle</label>
+						<input name="controle" autocomplete="off" type="text"
+							class="form-control jef-input-escuro" th:value="${obra?.controle}"
+							id="model-controle"
+							placeholder="Ex: OB2020-01" />
+					</div>
+					<!-- situação -->
+					<div class="form-group col-6 col-xl-12">
+						<label class="jef-card-text-item" for="exampleFormControlSelect1">Situação</label>
+						<!--testar dps colocando name pra ver se o spring salva-->
+						<select name="situacao" class="form-control jef-input-escuro"
+							id="model-situacao" th:value="${obra?.situacao}" required="required">
+							<!--  automatico pegando do ENUM -->
+							<option th:each="c : ${situacao}" th:text="${c}"></option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<!--coluna direita form-->
+			<div class="col-xl-8 col-md-8">
+				<!--nome-->
+				<div class="form-group">
+					<label for="formGroupExampleInput " class="jef-card-text-item">Nome
+						Cliente</label> <input name="cliente" type="text" autocomplete="off"
+						class="form-control jef-input-escuro-obrigatorio"
+						maxlength="40"
+						th:value="${obra?.cliente}" id="model-cliente"
+						required="required" placeholder="Ex: Petrobras" />
+				</div>
+
+				<!-- linha estado cidade -->
+				<div class="row no-gutters justify-content-between">
+					<!-- estado -->
+					<div class="form-group col-xl-6 col-12 pr-xl-2">
+						
+						<label for="formGroupExampleInput " class="jef-card-text-item">Estado</label>
+						<input name="estado" value="" autocomplete="off" type="text"
+							th:value="${obra?.estado}" min="0" step="any"
+							maxlength="20" id="model-estado"
+							class="form-control jef-input-escuro" placeholder="Ex: São Paulo" />
+					</div>
+					<!--  cidade -->
+					<div class="form-group col-xl-6 col-12 pr-xl-2">
+						<label for="formGroupExampleInput " class="jef-card-text-item">Cidade</label>
+						<input name="cidade" value="" autocomplete="off" type="text"
+							th:value="${obra?.cidade}" min="0" step="any"
+							 maxlength="20" id="model-cidade"
+							class="form-control jef-input-escuro" placeholder="Cubatão" />
+					</div>
+				</div>
+				<div class="row no-gutters justify-content-between">
+					<!--data inicio-->
+					<div class="form-group col-xl-6 col-12 pr-xl-2">
+						<label for="formGroupExampleInput " class="jef-card-text-item">Data
+							Início</label> <input name="data_inicio" autocomplete="off" type="date"
+							th:value="${obra?.data_inicio}"
+							 maxlength="10" id="model-data_inicio"
+							class="form-control jef-input-escuro" />
+					</div>
+					<!--data fim-->
+					<div class="form-group col-xl-6 col-12 ">
+						<label for="formGroupExampleInput " class="jef-card-text-item">Data
+							Fim</label> <input name="datafim" th:value="${obra?.datafim}"
+							 maxlength="10" id="model-datafim"
+							type="date" class="form-control jef-input-escuro" />
+					</div>
+					<!--descricao-->
+					<div class="form-group col-xl-12 col-12 ">
+						<label for="formGroupExampleInput " class="jef-card-text-item">Descrição
+							da Obra</label>
+						<textarea value="" maxlength="255" name="descricao"
+							type="text" th:text="${obra?.descricao}" required="required"
+							id="model-descricao"
+							class="form-control jef-input-escuro-obrigatorio"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+<!--  card equipe, utilizado no cadastro e na atualizacao -->
+<th:block th:fragment="card_equipe">
+	<div class="card p-2 w-100 mt-2 jef-card-cor">
+		<!--titulo card-->
+		<h6 class="jef-card-titulo">Equipe</h6>
+
+		<div id="container-aviso"
+			class="row align-items-start justify-content-center">
+			<!-- icone bonito-->
+			<div class="col-2 mt-2 mr-xl-4">
+				<div class="row no-gutters justify-content-center  mb-4">
+					<i class="fas fa-users-cog fa-7x jef-card-icone-cor"></i>
+				</div>
+			</div>
+			<div class="col-8 mt-2 mr-xl-4">
+				<div class="d-flex flex-column align-items-center p-4">
+					<h3 class="jef-card-titulo">Nenhum funcionário na obra</h3>
+					<button type="button" id="btn-show-conteudo"
+						class="btn btn-outline-success">Adicionar novo
+						funcionário</button>
+				</div>
+			</div>
+		</div>
+
+		<div id="container-conteudo" style="display: none">
+			<div class="row align-items-start justify-content-center">
+				<!-- icone bonito-->
+				<div class="col-xl-2 col-md-8 align-self-start mt-2 mr-xl-4">
+					<div
+						class="row no-gutters justify-content-center align-items-c mb-4">
+						<i class="fas fa-users-cog fa-7x " style="color: rgb(6, 19, 37)"></i>
+					</div>
+				</div>
+				<!-- coluna da direita-->
+				<div class="col-xl-8">
+					<th:block th:include="obra/cards :: mini_card_pesquisar_funcionarios"></th:block>
+				</div>
+			</div>
+			<!-- linha de baixo-->
+			<div
+				class="row no-gutters align-items-center justify-content-center mt-4">
+				<div class="w-100" style="height: 300px; overflow: auto;">
+					<table class="table table-sm table-hover text-white">
+						<thead
+							style="background-color: rgb(6, 19, 37); color: rgb(166, 255, 249)">
+							<tr>
+								<th scope="col">#</th>
+								<th scope="col">Nome</th>
+								<th scope="col">Cargo</th>
+								<th scope="col">Situação</th>
+								<th scope="col">Salário</th>
+								<th scope="col">Admissão</th>
+								<th scope="col">Demissão</th>
+								<th scope="col"></th>
+							</tr>
+						</thead>
+						<tbody id="tb_equipe">
+							<!-- javascript vai implementar a tabela -->
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</th:block>
+<th:block th:fragment="mini_card_pesquisar_funcionarios">
+	<!--  mini card de pesquisa -->
+					<div class="card p-2 w-100 jef-card-only-borda">
+						<h6 class="jef-card-titulo mb-2">Pesquisar funcionário</h6>
+						<div class="row no-gutters">
+							<!--codigo-->
+							<div style="display: none"
+								class="form-group col-xl-2 col-12 pr-xl-2">
+								<label for="formGroupExampleInput " class="jef-card-text-item">Código</label>
+								<input autocomplete="off" type="number"
+									class="form-control jef-input-escuro"
+									id="formGroupExampleInput" placeholder="000" />
+							</div>
+							<!-- Nome-->
+							<div class="form-group col-xl-12 col-12 pr-xl-2">
+								<label for="formGroupExampleInput2" class="jef-card-text-item">Nome</label>
+								<input type="text" autocomplete="off"
+									class="form-control jef-input-escuro"
+									id="mini-card-pesquisa-nome-func" placeholder="Nome funcionário" />
+							</div>
+							<!--Cargo-->
+							<div style="display: none"
+								class="form-group col-xl-5 col-12 pr-xl-2">
+								<label for="formGroupExampleInput " class="jef-card-text-item">Cargo</label>
+								<input type="number" autocomplete="off"
+									class="form-control jef-input-escuro" placeholder="Mecânico" />
+							</div>
+						</div>
+						<!-- procurar func -->
+						<div class="row no-gutters w-100">
+							<div class="w-100" style="height: 150px; overflow: auto;">
+								<table class="table table-sm table-hover text-white">
+									<tbody id="tb_equipe_banco">
+										<tr th:each="func : ${funcionarios}">
+											<th class="c-cd" th:text="${func.cd}"></th>
+											<td th:text="${func.nome}"></td>
+											<td th:text="${func.cargo}"></td>
+											<td><a style="cursor: pointer"><i
+													id="btn_info_tb_pesquisa_func"
+													th:attr="onclick=|btn_show_info_func_pesquisa(${func.cd})|"
+													class="fas fa-info-circle jef-icones-tabelas"></i></a></td>
+											<td><a style="cursor: pointer"><i 
+													th:attr="onclick=|btn_adicionar_tb_pesquisa_func(${func.cd})|" 
+													id="btn_adicionar_tb_pesquisa_func" 
+													class="fas fa-plus jef-icones-tabelas"></i></a></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+</th:block>
+<th:block th:fragment="modal_info">
+	<div class="modal fade" id="modal_info_func" tabindex="-1">
+		<div id="modal_info_container"class="modal-dialog modal-dialog-centered modal-lg">
+			<div class="modal-content" id="modal_info_conteudo">
+				<div class="modal-header" id="modal_info_head" style="background-color: rgb(14,28,47)">
+					<h5 class="jef-card-titulo fs-1 m-2" style=" color: white">Informação detalhada do funcionário</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" id="modal_info_body" style="background-color: rgb(14,28,47)">
+						<div class="d-flex flex-column flex-lg-row w-100" >
+							<!-- resumo com nome e estrelas  -->
+							<div class="d-flex flex-column w-100 align-items-center" >					
+								<th:block th:include="resumoFunc/cards :: card_resumo_func"></th:block>
+							</div>
+							<!-- info func -->
+							<div class="d-flex flex-column w-100 h-100 align-items-center jef-border-left">
+								<th:block th:include="resumoFunc/cards :: card_resumo_info"></th:block>
+							</div>
+						
+						</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>

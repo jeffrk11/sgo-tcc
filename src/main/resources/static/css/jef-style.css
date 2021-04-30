@@ -1,0 +1,218 @@
+body {
+	background-color: rgb(6,19,37);
+}
+
+.j-main {
+	padding-top: 50px;
+}
+/*dropdown*/
+.jef-dropdown-estilo{
+	background-color: rgb(14, 28, 47);
+	color: rgb(14, 28, 47);
+	box-shadow: 2px 2px 5px #000000;
+}
+/*outros*/
+
+.rounded-4 {
+  border-radius: 25px;
+}
+.rounded-4-top {
+ border-top-left-radius: 25px;
+ border-top-right-radius: 25px;
+}
+a.linksjef {
+	text-decoration: none;
+	color: rgb(45, 149, 151);
+}
+.jef-border-left{
+	border-left: 2px solid hsla(0,0%,100%,.048);
+}
+.jef-border-right{
+	border-right: 2px solid hsla(0,0%,100%,.048);
+}
+.jef-border-bottom{
+	border-bottom: 2px solid hsla(0,0%,100%,.048);
+}
+.jef-img-funcionario{
+	background: url('') no-repeat;
+}
+/*cards*/
+.jef-card-cor{
+	background-color: rgb(14, 28, 47);
+	/*box-shadow: 2px 2px 5px #000000;*/
+}
+.jef-card-icone-cor{
+	color: rgb(22, 74, 70);
+}
+.jef-card-titulo {
+	color: rgb(22, 74, 71);
+	font-size: 0.9em;
+}
+.jef-card-text-item {
+	color: rgb(166, 255, 249);
+}
+.jef-card-text-item-solo {
+	color: rgb(166, 255, 249);
+	font-size: 2em;
+}
+.jef-card-only-borda{
+	background-color: rgba(0,0,0,0);
+	border-style: solid;
+	border-color: rgba(22, 74, 71, 0.5);
+}
+/*INPUT*/
+.jef-icones-escuros {
+	color: rgb(22, 74, 70);
+}
+.jef-input-escuro {
+	background-color: rgb(6, 19, 37);
+	border-color: rgb(22, 74, 71);
+	color: white;
+}
+.jef-input-escuro-obrigatorio {
+	background-color: rgb(6, 19, 37);
+	border-color: rgb(159,70,98);
+	color: white;
+}
+.jef-input-escuro:focus, .jef-input-escuro-obrigatorio:focus {
+	background-color: rgb(6, 19, 37);
+	color: white;
+}
+/*TABELA*/
+.jef-click :hover{
+	cursor: pointer;
+}
+.jef-icones-tabelas{
+	color: rgb(63, 154, 1);;
+}
+.jef-icones-tabelas-remove{
+	color: rgb(255, 55, 55);
+}
+.jef-icones-tabelas-edit{
+	color: rgb(255,146,43);
+}
+/*SCROL BAR*/
+/* width */
+::-webkit-scrollbar {
+	width: 5px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+	background: #f1f1f1;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #888;
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
+
+/*RADIO BUTTON*/
+.toggle_radio{
+  position: relative;
+  background: rgba(255,255,255,.1);
+  margin: 4px auto;
+  overflow: hidden;
+  padding: 0 !important;
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  border-radius: 50px;
+  position: relative;
+  height: 33px;
+  width: max-content;
+}
+.toggle_radio > * {
+  float: left;
+}
+.toggle_radio input[type=radio]{
+  display: none;
+  /*position: fixed;*/
+}
+.toggle_radio label{
+  color: rgba(255,255,255,.9);
+  z-index: 0;
+  display: block;
+  width: 100px;
+  height: 20px;
+  margin: 3px 3px;
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  border-radius: 50px;
+  cursor: pointer;
+  z-index: 1;
+  /*background: rgba(0,0,0,.1);*/
+  text-align: center;
+  /*margin: 0 2px;*/
+  /*background: blue;*/ /*make it blue*/
+}
+.toggle_option_slider{
+  /*display: none;*/
+  /*background: red;*/
+  width: 100px;
+  height: 86%;
+  position: absolute;
+  top: 3px;
+  -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  border-radius: 50px;
+  -webkit-transition: all .4s ease;
+  -moz-transition: all .4s ease;
+  -o-transition: all .4s ease;
+  -ms-transition: all .4s ease;
+  transition: all .4s ease;
+}
+
+.tt1:checked ~ .toggle_option_slider{
+  background: rgb(255 2 2 / 22%);
+  left: 3px;
+}
+.tt2:checked ~ .toggle_option_slider{
+  background: rgb(76 255 2 / 22%);
+  left: 109px;
+}
+/*MINI CARD SELECIONAR*/
+.jef-icon-container  {
+	padding: 20%;
+	background: linear-gradient(-90deg, rgb(22, 74, 71) 0%, rgb(10, 94, 90) 40%, rgba(0, 0, 0, 0.28)	60%);
+	border-radius: 100%;
+	width: 150px;
+	height: 150px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: white;
+	transition: all 0.8s ease;
+	background-position: 0px;
+	background-size: 250%;
+	pointer-events: none;
+}
+.jef-card-selecionar i{
+	color: #b7bfcc;
+	pointer-events: none;
+}
+.jef-card-selecionar-click i{
+	color: rgb(6, 19, 37);
+	transition: all 0.3s ease;
+}
+.jef-card-selecionar-click .jef-icon-container {
+   background-position: 100%;
+   transition: all 0.3s ease;
+}
+.fs-1 {
+	text-align: center;
+	color: white;
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 4px;
+	pointer-events: none;
+}
+.fs-2 {
+	opacity: 0;
+	pointer-events: none;
+}
+.jef-card-selecionar-click .fs-2 {
+	transition: all 0.3s ease;
+	opacity: 1;
+}

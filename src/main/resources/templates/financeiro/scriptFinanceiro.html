@@ -1,0 +1,131 @@
+<!-- para palavras pt-br -->
+<meta charset="UTF-8">
+<th:block th:fragment="script">
+	<!-- pagina inicializada -->
+	<script th:inline="javascript">
+	//carregamento da pagina -------------------------------
+	jQuery(document).ready(async function($) {
+		//import do controller
+		
+		var movimentacao = /*[[${movimentacao}]]*/ "movimentacao";
+		console.log(movimentacao);
+		//se for diferente de 0 nao e nulo
+		if(movimentacao.id != 0){
+			$("#model-categoria").val(movimentacao.categoria);
+			$("input[type='radio'][name='situacao'][value='"+movimentacao.situacao+"']").prop("checked",true);
+			$("input[type='radio'][name='tipo'][value='"+movimentacao.tipo+"']").prop("checked",true);
+		}
+		if(movimentacao.obra != null){
+			vincularObraByCd(movimentacao.obra.cd);
+		}
+		if(movimentacao.funcionario != null && movimentacao.funcionario.length > 0){
+			for(f in movimentacao.funcionario){
+				vincularFuncByCd(movimentacao.funcionario[f].cd);
+			}
+		}
+		
+	});
+	</script>
+	<!-- script selecionar vinculacao -->
+	<script th:inline="javascript">
+	var obras = /*[[${obras}]]*/"obras";
+	var funcionarios = /*[[${funcionarios}]]*/"funcionarios";
+	//array auxiliar para os vinculados
+	var vinculados = [];
+	var tipoVinc = 'x';
+	
+	//show pesquisa obra se	
+	$(document).on('click','.jef-card-selecionar',function(e) {
+		var rev = $(e.target).attr('id').substring(10) == 'func' ? 'obra' : 'func';
+		var select = $(e.target).attr('id').substring(10);
+		vinculados = [];
+		tipoVinc = 'x';
+		
+		console.log($(e.target).attr('id'));
+		//limpa os vinculados sempre que trocar 
+		$('#container-vinculados').empty();
+		
+		$('#mini_card_'+$(e.target).attr('id').substring(10)).toggleClass('jef-card-selecionar-click');
+		//$("#conteudo_pesquisar_"+$(e.target).attr('id').substring(10)).css("display",$("#conteudo_pesquisar_"+$(e.target).attr('id').substring(10)).css("display") == "block" ? "none" : "block");
+		$('#mini_card_'+$(e.target).attr('id').substring(10)).attr('class').includes('jef-card-selecionar-click') ?
+				$("#conteudo_pesquisar_"+$(e.target).attr('id').substring(10)).css("display","block") :
+				$("#conteudo_pesquisar_"+$(e.target).attr('id').substring(10)).css("display","none");
+
+		$('#conteudo_pesquisar_'+rev).css("display","none");
+		$('#modal_info').css('display','none');
+		$('#modal_info_func').css('display','none');
+		
+		if($('#mini_card_'+rev).attr('class').includes('jef-card-selecionar-click')){
+			$('#mini_card_'+rev).toggleClass('jef-card-selecionar-click');	
+		}
+		//definindo onclicks para cada item da tabela pelo sue tipo
+		gerarOnclicksNovos(select == 'obra' ? 'Obra' : 'Func' );
+	});
+	</script>
+	<!-- adicionar vinculado -->
+	<script th:inline="javascript">
+		//vincular obra btn
+		$(document).on('click','fa-plus',function(e){
+			console.log($(this).closest('tbody').attr('id'));
+			
+	});
+		function vincularObraByCd(cd){
+			vinculados = [];
+			vinculados.push(cd);
+			tipoVinc = 'o'
+			//definindo para poder utilizar na pagina de lacamento
+			$('#conteudo_pesquisar_obra').css("display","none");
+			//desenhar info obra
+			desenharObraInfo(cd);
+			$('#btn_add_obra').css('display', 'none');
+			$('#modal_info_obra #modal_info_container #modal_info_conteudo #modal_info_body').clone().appendTo('#container-vinculados');
+			console.log(vinculados);
+		}
+		function vincularFuncByCd(cd){
+			if(!vinculadosCheck(cd)){
+				vinculados.push(cd);
+				tipoVinc = 'f';
+				desenharInfoFunc(cd);
+				$('#modal_info_func #modal_info_container #modal_info_conteudo #modal_info_body').clone().appendTo('#container-vinculados');
+			}
+			
+		}
+		function vinculadosCheck(cd){
+			for(var x in vinculados){
+				if(vinculados[x] == cd){
+					showModalAviso('Funcionário já adicionado',undefined,undefined,'fa-user-lock','#edd537',false,true);
+					return true;
+				}
+			}
+			return false;
+		}
+		
+	</script>
+	<script th:inline="javascript">
+	//tipo um overrride porem os dois metodos são chamados
+	$("#mini-card-pesquisa-nome-cliente").keyup(
+		function(){
+			console.log("cliente");
+			gerarOnclicksNovos('Obra');
+		});
+	//tipo um overrride porem os dois metodos são chamados
+	$("#mini-card-pesquisa-nome-func").keyup(
+		function(){
+			console.log("func");
+			gerarOnclicksNovos('Func');
+		});
+	function gerarOnclicksNovos(tipo){
+		//mudar id para funcionar so nessa pagina
+		var btns_add = document.getElementsByClassName("fa-plus");
+		tipo = tipo == 'Func' ? 'Func' : 'Obra';
+		
+		for( var i = 0; i < btns_add.length; i++){
+			//btns_add[i].className += ' btn_add_lancamento';
+			console.log(btns_add[i].getAttribute('onclick'));
+			var x = (btns_add[i].getAttribute('onclick').split("(").pop().split(")")[0]) 
+			btns_add[i].setAttribute('onclick','vincular'+tipo+'ByCd('+x+')');
+		}
+	}
+	</script>
+	
+</th:block>

@@ -1,0 +1,252 @@
+<!-- para palavras pt-br -->
+<meta charset="UTF-8">
+<th:block th:fragment="script">
+	<!--manipulacao equipe, tabelas -->
+	<script th:inline="javascript">
+		//global auxiliar para equipe da obra	
+		var funcionarios_obra = [];
+		//funcionarios no banco, carregado apenas 1 vez
+		var funcionarios = /*[[${funcionarios}]]*/ "func_banco";
+		
+		function adicionarFuncEquipeByCD(cd){
+			console.log("adicionando func pelo cd = "+cd);
+
+			//pega o codigo do func q vem da tabela	
+			if(validarFunc(cd) != false){
+				for( funcs in funcionarios){
+					//adiciona o obj funcionario no array de funcionarios
+					if(cd == funcionarios[funcs].cd){
+						funcionarios_obra.push(funcionarios[funcs]);
+						desenharTabelaEquipe(funcionarios_obra);
+					}
+				}
+			}else{
+				showModalAviso('Funcionário já adicionado',undefined,undefined,'fa-user-lock','#EDD537',false,true);
+			}
+		}
+	
+		function removeEquipeFunc(cd){
+			console.log("removendo func "+cd);
+			funcionarios_obra.forEach(function (item, indice, array) {
+				  if(funcionarios_obra[indice].cd == cd){
+					  funcionarios_obra.splice(indice,1);//deletar do array
+				  }
+			});
+			desenharTabelaEquipe(funcionarios_obra);
+		}
+		
+		function validarFunc(cd){
+			console.log("validando funcionario "+cd);
+			var b = true;
+
+			funcionarios_obra.forEach(function (item, indice, array) {
+				  if(funcionarios_obra[indice].cd == cd){
+					  b =  false;
+				  }
+				});
+			return b;
+		}
+		
+		function desenharTabelaEquipe(equipe){
+			console.log("desenhando tabela equipe");
+			//console.log(Object.values(equipe[0]));
+			//desenhar equipe na tela baseado no array
+			var tb = document.getElementById("tb_equipe");				
+			if(equipe.length > 0){
+				//limpar tabela e redesenhar
+				tb.innerHTML = "";
+				for(var i = 0; i < equipe.length; i++){
+					//linha da tabela equipe
+					var row = document.createElement("tr");	
+					//colunas
+					//ordem de chaves definida pelo programador, dos valores do json da obra
+					var ordem = [ 'cd','nome','cargo','situacao','salario','admissao','demissao'];
+					for(var j = 0; j < ordem.length; j++){
+						var cell = document.createElement("td");
+				
+						cell.appendChild(document.createTextNode( equipe[i][ordem[j]]));
+						cell.setAttribute('class','c-'+j)
+						row.appendChild(cell);				
+					}
+					//quando ultima coluna chegar add o botão no final
+					row.appendChild(criarBtnIcone(true,'fas fa-trash jef-icones-tabelas-remove', undefined ,'btn_remover_tb'));
+					//row.appendChild(criarBtnIcone(true,'fas fa-plus jef-icones-tabelas', undefined , 'btn_adicionar_tb_pesquisa'));
+					//depois de preencher a linha adiciona a tabela
+					tb.appendChild(row);
+				}	
+			}else{
+				//se o array estiver zerado limpa a tabela
+				//tb.innerHTML = "Nenhum Funcionário adicionado a essa obra";
+				//depois elaborar um aviso melhor
+				tb.innerHTML = "";
+			}
+		}
+		
+		
+		
+		//quando a pagina carrega
+		jQuery(document).ready(function($){
+			//pagina pronta, desenhar lista de equipe
+			//inicializando variavel e definindo funcionarios 
+			funcionarios_obra = /*[[${equipe}]]*/ "equipe";
+			
+			console.log(/*[[${obra}]]*/ "equipe");
+			
+			//mostrar conteudo caso seja maior que zero e adiciona a equipe
+	 		if(funcionarios_obra != null && funcionarios_obra.length > 0){
+	 			desenharTabelaEquipe(funcionarios_obra);
+	 			//mostra o conteudo do card
+	 			showConteudo();
+	 			
+	 			//selecionar situacao da obra
+				var situacao = /*[[${obra?.situacao}]]*/ "obra";
+				document.getElementById('model-situacao').value = situacao;
+				
+	 		}else{
+	 			funcionarios_obra = [];
+	 		}
+
+			//definindo função do botao assim q acarregar a pagina
+			$("#btn_cancelar").click(function(event){
+				location.href = "javascript:history.go(-1)";
+			})
+			
+			
+			
+		});	
+		
+		function getIDsFuncionarios(equipe){
+			var cds= [];
+			if(equipe.length == 0){
+				cds[0] = "vazio";
+			}else{
+				equipe.forEach(function (item, indice, a) {
+					 cds.push(equipe[indice].id);
+				});
+			}
+			return cds;
+		}
+	
+	
+	
+	
+	
+	
+	//dessa forma para funcionar o click pois a tabela é redesenhada varias vezes
+	$(document).on('click','#btn_remover_tb',function(){
+			var $rowExcluir = $(this).closest('tr').find('.c-0').text();
+			removeEquipeFunc($rowExcluir);
+		});
+	
+	
+	//mostrar conteudo do card obras trabalhada     
+    $(document).on('click','#btn-show-conteudo',function(){
+   			showConteudo();
+		});
+	
+	function showConteudo(){
+		var conteudo = document.getElementById("container-conteudo");
+        var aviso = document.getElementById("container-aviso");
+        conteudo.style.display = "block";
+        aviso.style.display = "none";  
+	}
+	
+	function validarControleObra(control,array_ctrl){
+		if(array_ctrl.find(element => element == control) != null){
+			showModalAviso('Já existe uma obra com esse controle',undefined,undefined,'fa-tags','#edd537',false,true);
+			return false;
+		}else{
+			return true;
+		}
+	}
+</script>
+</th:block>
+<th:block th:fragment="script_mini_card_pesquisar_funcionarios">
+<script th:inline="javascript">
+//manipulaçao do array e tabela equipe banco------------------------------
+//pesquisa de funcionarios
+	$("#mini-card-pesquisa-nome-func").keyup(function() {
+		console.log(this.value)
+		var aux = [];
+		
+		for(i in funcionarios){
+			//conferindo se existe a palavra dentro dos nomes de cada funcionario
+			console.log(funcionarios[i].nome.toLowerCase().includes(this.value.toLowerCase()));
+			if(funcionarios[i].nome.toLowerCase().includes(this.value.toLowerCase())){
+				aux.push(funcionarios[i]);
+			}		
+		}
+			console.log(aux.length);
+			desenharTabelaEquipeBanco(aux);
+	});
+	
+//adicionar pela botao
+	$(document).on('click','#btn_adicionar_tb_pesquisa_f',function(){
+		var $rowADD = $(this).closest('tr').find('.c-cd').text();
+		try{
+			adicionarFuncEquipeByCD($rowADD);	
+		}catch(e){
+			console.log("requisiçao de fora")
+		};
+	});
+	
+	function btn_adicionar_tb_pesquisa_func(cd){
+		//var $rowADD = $(this).closest('tr').find('.c-cd').text();
+		adicionarFuncEquipeByCD(cd);	
+	}
+
+	
+	function desenharTabelaEquipeBanco(funcionarios){
+		//pegando tabela do banco para pesquisa
+		var tb = document.getElementById("tb_equipe_banco");	
+		
+		if(funcionarios.length > 0){
+			//limpar tabela antes
+			tb.innerHTML = "";
+			tb = criarTabela("tb_equipe_banco",funcionarios,['cd','nome','cargo','admissao'], 
+					[criarBtnIcone(false,'fas fa-info-circle jef-icones-tabelas','btn_show_info_func_pesquisa(cd)','btn_info_tb_pesquisa'),
+						criarBtnIcone(false,'fas fa-plus jef-icones-tabelas', 'btn_adicionar_tb_pesquisa_func(cd)' , 'btn_adicionar_tb_pesquisa_func')])
+		}else{
+			tb.innerHTML= "Nenhum Funcionário encontrado";
+		}
+	}
+
+</script>
+<!-- info obra -->
+<script th:inline="javascript">
+	function btn_show_info_func_pesquisa(cd){
+		console.log(cd)
+		$('#modal_info_func').modal('show');
+		desenharInfoFunc(cd);
+	}
+	
+	function desenharInfoFunc(cd){
+		//aux pra armazenar o objeto
+		var data;
+		if(funcionarios.length > 0){
+			//procurar funcionario passado
+			funcionarios.forEach(function (item,indice){
+				if(funcionarios[indice].cd == cd){
+					data = funcionarios[indice];
+				}
+			});
+			//definindo foto funcionario
+			$('#jef-img-funcionario').attr('src',uint8ToBlobUrl(byteToInt(new Int8Array(base64ToArrayBuffer(data.img)))).urlBlob);
+			//$("#jef-img-funcionario").attr("src",aux.urlBlob)
+			//definindo estrelas
+			setEstrelas("estrela-"+ (data.nota == 0 ? data.nota += 1 : data.nota));
+			
+			
+			for(info in data){
+				$("#model-funcionario-"+info).text(data[info]);
+			}
+		}
+	}
+	
+	function testeee(){
+		//console.log(Enconding.UTF8.GetBytes("hello"))
+	}
+
+</script>
+
+</th:block>

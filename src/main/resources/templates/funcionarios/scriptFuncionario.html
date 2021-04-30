@@ -1,0 +1,314 @@
+<!-- para palavras pt-br -->
+<meta charset="UTF-8">
+<th:block th:fragment="script">
+	<!--  manipulacao equipe info, obras trabalhadas, todas as obras -->
+	<script th:inline="javascript">
+		//array global para auxiliar
+		var foto = [];
+		var obras_funcionario = [];
+		//pega o objeto que foi definido no back
+		var func = /*[[${func}]]*/"func";
+		//array de obras existentes no banco
+		var obras = /*[[${obras}]]*/"obras";
+		
+		//mostrar conteudo do card obras trabalhada     
+		$(document).on('click', '#btn-show-conteudo', function() {
+			var conteudo = document.getElementById("container-conteudo");
+			var aviso = document.getElementById("container-aviso");
+			conteudo.style.display = "flex";
+			aviso.style.display = "none";
+			//carregar obras ja que vai adicionar
+		});			
+		//manipulacao tb obras funcionario ---------------------------------
+		function adicionarObraFunc(cd) {
+			console.log("adicionando obra ao funcionario");
+
+			if (validarObraFunc(cd) == true) {
+				for( ob in obras){
+					if(cd == obras[ob].cd){
+						obras_funcionario.push(obras[ob]);		
+					}
+				}	
+				desenharTabelaFunc(obras_funcionario);
+			} else {
+				showModalAviso('Obra já adicionada',undefined,undefined,'fa-lock','#EDD537',false,true);
+			}
+		}
+		//valida se existe a obra no array
+		function validarObraFunc(cd) {
+			console.log("validando obra");
+			var b = true;
+			obras_funcionario.forEach(function(item, indice, array) {
+				if (obras_funcionario[indice].cd == cd) {
+					b = false;
+				}
+			});
+			return b;
+		}
+		//remove das obras trabalhadas
+		function removerObraFunc(cd) {
+			console.log("removendo obra do funcionario");			
+			obras_funcionario.forEach(function(item, indice, array) {
+				if (obras_funcionario[indice].cd == cd) {
+					obras_funcionario.splice(indice, 1);//deletar do array
+					desenharTabelaFunc(obras_funcionario);
+				}
+			});
+		}
+		//desenha tabela de obras trabalhadas
+		function desenharTabelaFunc(obras) {
+			console.log("desenhando tabela de obras do func");
+			//desenhar equipe na tela baseado no array
+			var tb = document.getElementById("tb_obras_trabalhadas");
+			//se o func ja tiver obras vinculadas, desenhar
+			if (obras.length > 0) {
+				//desenha tabela obras do func
+				tb = criarTabela("tb_obras_trabalhadas", obras, 
+						['cd','controle','situacao','cliente','descricao','estado','cidade','data_inicio','datafim'],
+						[criarBtnIcone(false,'fas fa-trash jef-icones-tabelas-remove',undefined,'btn_remover_tb')]);
+			} else {
+				tb.innerHTML = "";
+			}
+		}
+		
+		
+		window.onload = function(){
+			//window.open('ftp://jefsoares.ajvengenharia.com.br@ftp.ajvengenharia.com.br/');
+			
+		}
+		async function ftpConnect(){
+			
+			
+			
+			//var ftp = new FtpConnection("ftp://ftp.ajvengenharia.com.br") ;
+			//ftp.login("jefsoares.ajvengenharia.com.br", "ajveng150");
+			//console.log(ftp.pwd());
+			
+			 const ftp = require("basic-ftp")
+			 const client = new ftp.Client()
+			    client.ftp.verbose = true
+			    try {
+			        await client.access({
+			            host: "ftp://ftp.ajvengenharia.com.br",
+			            user: "jefsoares.ajvengenharia.com.br",
+			            password: "ajveng150",
+			            secure: true
+			        })
+			        console.log(await client.list())
+			        //await client.uploadFrom("README.md", "README_FTP.md")
+			        //await client.downloadTo("README_COPY.md", "README_FTP.md")
+			    }
+			    catch(err) {
+			        console.log(err)
+			    }
+			    client.close()
+		}
+		
+		//carregamento da pagina -------------------------------
+		jQuery(document).ready(async function($) {
+			//ftpConnect();
+			//mascara para input
+			$("#model-celular").mask('(00) 00000-0000');
+			
+			//carregar imagem salva no banco se tiver
+			var img_perfil = /*[[${img_perfil}]]*/"";
+			//se existir, coloca na tag img e na var auxiliar global
+			if(img_perfil != null && img_perfil.length > 0){
+				var aux = await uint8ToBlobUrl(img_perfil);										
+				$("#jef-img-funcionario").attr("src",aux.urlBlob)							
+				foto = intToByte(aux.uint8);
+				//devido algum bug visual do html algumas imagens nao carregam ate a pagina sofrer uma atualizacao, 
+				//desse modo ela sempre carregara completamente
+				setTimeout(function() {
+					document.getElementById("container-img-perfil").style.padding = "1px";
+				}, 100);
+				
+			}
+			//definindo estrelas
+			setEstrelas("estrela-"+ (func.nota == 0 ? func.nota += 1 : func.nota));
+			
+			//quando a pagina carregar desenhar
+			obras_funcionario = /*[[${obras_trabalhadas}]]*/"obras";
+			if (obras_funcionario != null && obras_funcionario.length > 0 ) {
+				desenharTabelaFunc(obras_funcionario);				
+				//clicar o botao
+				var btn = document.getElementById("btn-show-conteudo");
+				btn.click();
+			}else{
+				obras_funcionario = [];
+			}
+			//selecionar situacao do func
+			var situacao = /*[[${func?.situacao}]]*/"func";
+			document.getElementById('model-situacao').value = situacao;			
+		
+			
+		});
+		//botoes da pagina ---------------------------------------------------------
+		//adicionar obra pela info
+		$(document).on('click', '#btn_add_obra', function() {
+			console.log("adicionando obra pela info");
+			adicionarObraFunc($('#info-conteudo-cd').text());
+			$('#modal_info').modal('hide');
+		});
+		//dessa forma pois a tabela é redesenhada varias vezes
+		$(document).on('click', '#btn_remover_tb', function() {
+			var $rowExcluir = $(this).closest('tr').find('#c-0').text();
+			removerObraFunc($rowExcluir);
+		});
+		
+		
+
+		function getCodigosFuncs(obras) {
+			var cds = [];
+			if (obras.length == 0) {
+				cds[0] = "vazio";
+			} else {
+				obras.forEach(function(item, indice, a) {
+					cds.push(obras[indice].cd);
+				});
+			}
+			return cds;
+		}
+		
+		function validarCodigoFunc(cd,array_cd){
+			if(array_cd.find(element => element == cd) != null){
+				showModalAviso('Já existe um funcionário com esse código',undefined,undefined,'fa-user-tag','#edd537',false,true);
+				return false;
+			}else{
+				return true;
+			}
+		}
+		
+	
+	</script>
+	<!-- script mini card pesquisar -->
+	<th:block th:fragment="script_mini_card_pesquisar_obras">
+	<script th:inline="javascript">
+	//btn show info obra
+	$(document).on('click', '#btn_info_tb_pesquisa', function() {
+		//var $rowADD = $(this).closest('tr').find('#c-0').text();
+		
+	});
+	function btn_show_info_obra_pesquisa(cd){
+		showInfoObra(cd);
+	}
+	//adicionar pela botao pelo pesquisar
+	function btn_adicionar_tb_pesquisa_obra(cd){
+		//var $rowADD = $(this).closest('tr').find('#c-0').text();
+		adicionarObraFunc(cd);
+	}
+	
+	$("#mini-card-pesquisa-nome-cliente").keyup(
+			function() {
+				//var f = /*[[${obras}]]*/"obras";
+				var aux = [];
+
+				for (i in obras) {
+					//console.log(f[i].nome.toLowerCase().includes(this.value.toLowerCase()));
+					if (obras[i].cliente.toLowerCase().includes(this.value.toLowerCase())) {
+						aux.push(obras[i]);
+					}
+				}
+				desenharTabelaObra(aux);
+	});
+	//desenha tabela obras do banco
+	function desenharTabelaObra(obras) {
+		console.log("desenhando obras do banco");
+		var tb = document.getElementById("tb_obra_banco");
+		if(obras.length > 0){		
+			//desenha tabela 	
+			tb = criarTabela("tb_obra_banco", obras, 
+					['cd','controle','cliente','data_inicio'],
+					[criarBtnIcone(false,'fas fa-info-circle jef-icones-tabelas','btn_show_info_obra_pesquisa(cd)','btn_info_tb_pesquisa'),
+					 criarBtnIcone(false,'fas fa-plus jef-icones-tabelas','btn_adicionar_tb_pesquisa_obra(cd)', 'btn_adicionar_tb_pesquisa_obra')]);
+		}else{
+			tb.innerHTML = "Nenhuma obra encontrada";
+		}
+	}	
+	//manipulacao info obra 
+	function showInfoObra(cd) {
+		console.log("mostrando info obras");
+		console.log(cd);
+		//mostrando elementos pois o financeiro utiliza e altera
+		$('#modal_info').attr('class','modal fade');
+		$('#modal_info_head').css('display','inline-flex');
+		$('#btn_add_obra').css('display', 'block');
+		$('#modal_info_obra').modal('show');
+		desenharObraInfo(cd);
+	}
+	//coloca as informações na info 
+	function desenharObraInfo(cd) {
+		console.log("desenhando info obra");
+		if (obras.length > 0) {
+			//variavel q vai armazenar o objeto 
+			var data;
+			//procura dentro do json o cd da obra
+			obras.forEach(function(item, indice, a) {
+				if (obras[indice].cd == cd) {
+					data = obras[indice];
+				}
+			});
+			console.log(data);
+			for(info in data){
+				$('#info-conteudo-'+info).text(data[info]);			
+			}
+			//desenhar equipe
+			desenharTabelaEquipeInfo(data.funcionarios);
+		}
+	}
+	//desenha tabela equipe info
+	function desenharTabelaEquipeInfo(equipe){
+		console.log("desenhando equipe obra info");
+		var tb = document.getElementById("info-tb_equipe_banco");
+		tb.innerHTML = "";
+		if(equipe.length > 0){
+			//desenha tabela equipe info
+			tb = criarTabela("info-tb_equipe_banco", equipe,  ['cd','nome','cargo','admissao']);
+			
+		}else{
+			tb.innerHTML= "Nenhum Funcionário encontrado";
+		}
+	}
+	</script>
+	</th:block>
+	<!-- SCRIPT ESTRELAS PONTUACAO -->
+	<script>
+		
+		$(document).on('mouseover', '.estrela-ponto', function(e) {		
+			setEstrelas(e.target.id);	
+		});
+		$(document).on('mouseout', '.estrela-ponto', function(e) {		
+			setEstrelas("estrela-"+func.nota);
+		});
+		$(document).on('click', '.estrela-ponto', function(e) {		
+			setEstrelas(e.target.id);	
+			func.nota= getEstrelas();
+			//nota_estrela = getEstrelas();
+			console.log(func.nota);
+		});
+		
+	
+	
+	</script>
+	<!-- SCRIPT PARA PEGAR FOTO -->
+	<script>
+	//funcao async que vai esperar pelo carregamento da imagem que o usuario escolher
+	document.getElementById("model-img").addEventListener("change", async function(e){	
+		//var getImagePath = URL.createObjectURL(event.target.files[0]);
+		//nessa funcao async eh forcada a esperar pelo resultado do carregamento da imagem e assim dando continuidade ao codigo, retorna uma promise
+		console.log("change event");
+		var x = await getImageFromPc(e.target.files[0]);
+		if(!(x === undefined)){
+			console.log("X");
+			console.log(x);
+			//retorna-se um json com os dados necessarios 
+			//variavel global para passar os bytes da imagem para o back
+			foto = intToByte(x.uint8);
+			//define na tag img
+			document.getElementById("jef-img-funcionario").src = x.urlBlob;	
+		}else{
+			e.target.value = "";
+		}
+	});	
+	</script>
+</th:block>

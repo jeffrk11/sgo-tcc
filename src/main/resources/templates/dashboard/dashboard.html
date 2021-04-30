@@ -1,0 +1,282 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head th:replace="fixos/layout :: head(~{ :: .titulo}, ~{ :: .script})">
+<meta charset="UTF-8">
+<title class="titulo">DashBoard</title>
+<!-- graficos dashboard -->
+<script
+	class="script"
+	src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"
+	integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
+	crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+	<th:block th:include="fixos/layout :: esqueleto(~{ :: .conteudo})">
+		<!-- conteudo da pagina dentro do esqueleto -->	
+		<th:block class="conteudo">
+			<div class="d-flex flex-column"> 
+				<!-- conteudo da pagina aqui -->
+				<div class="row no-gutters">
+					<div class="d-flex w-100 flex-row justify-content-center">
+						<!-- card pequeno quantidade funcionarios -->
+						<div class="p-2 w-100">
+							<th:block th:include="dashboard/cards :: card_pequeno_total_icone('Total de Funcionários',${dashinfo.get('QtdFunc')}, 'fa-users','/funcionarios/lista')"></th:block>
+						</div>
+						<!-- card pequeno quantidade obras -->
+						<div class="p-2 w-100">
+							<th:block th:include="dashboard/cards :: card_pequeno_total_icone('Total de Obras',${dashinfo.get('QtdObra')},'fa-industry','/obras/lista')"></th:block>
+						</div>
+						<!-- card pequeno quantidade contas a pagar -->
+						<div class="p-2 w-100">
+							<th:block th:include="dashboard/cards :: card_pequeno_total_icone('Total de Contas a Pagar',${dashinfo.get('QtdMovimentacaoPENDENTE')},'fa-file-invoice-dollar','/financeiro/consultar')"></th:block>
+						</div>
+						<div class="p-2 w-100"> 
+							<th:block th:include="dashboard/cards :: card_pequeno_total_icone('Total de Hipopotamos','45','fa-hippo','#')"></th:block>
+						</div>
+					</div>
+				</div>
+				<div class="row no-gutters">
+					<div class="col-md-6 col-xxl-3 p-2">
+						<!--Card funcionarios quantitativo e grafico-->
+						<th:block th:replace="dashboard/cards :: card_medio_funcionario_vertical"></th:block>
+					</div>
+					<div class="col-md-6 col-xxl-3 d-flex flex-column">
+						<!--Card salarios-->
+						<div class="w-100 p-2">
+							<th:block th:include="dashboard/cards :: card_pequeno_total_icone('Sálario de Funcionários ativos',${dashinfo.get('SalarioAtivos')} ?: 'Sem funcionários ativos' , 'fa-coins fa-3x','/funcionarios/lista')">
+						</div>
+						<!-- card grafico func -->
+						<div class="w-100 h-100 p-2">
+							<!--Card funcionarios quantitativo e grafico-->
+							<th:block th:replace="dashboard/cards :: card_medio_funcionario"></th:block>
+						</div>
+					</div>				
+					<!--card obras quantitativo e grafico-->
+					<div class="col-md-6 col-xxl-3 p-2">
+						<th:block th:replace="dashboard/cards :: card_medio_obra"></th:block>
+					</div>
+					<!--card clientes-->
+					<div class="col-md-6 col-xxl-3 p-2">
+						<div class="card p-2 h-100 jef-card-cor">
+							<h6 class="jef-card-titulo">Clientes Recentes</h6>
+							<div class="row pt-2 h-100">
+								<div class="col h-100">
+									<!--lista card auxiliar-->
+									<div
+										class="d-flex flex-row justify-content-around align-items-center h-100">
+										<!--cliente 1-->
+										<div class="d-flex flex-column align-items-center">
+											<i class="fas fa-home fa-3x jef-icones-escuros"></i> <span
+												class="jef-card-text-item"> Pessoal</span>
+										</div>
+	
+										<!--cliente 2-->
+										<div class="d-flex flex-column align-items-center">
+											<i class="fas fa-industry fa-3x jef-icones-escuros"></i> <span
+												class="jef-card-text-item"> Indústria</span>
+										</div>
+	
+										<!--cliente 3-->
+										<div class="d-flex flex-column align-items-center">
+											<i class="fas fa-building fa-3x jef-icones-escuros"></i> <span
+												class="jef-card-text-item"> Civil</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row no-gutters">
+					<!--card gastos mensais-->
+					<div style="display:block" class="col mb-1 p-1">
+						<div class="card p-2 h-100 jef-card-cor">
+							<h6 class="jef-card-titulo">Gastos Mensais</h6>
+							<div class="row pt-2 h-100">
+								<div class="col h-100">
+									<!--lista card auxiliar-->
+									<div class="d-flex flex-row justify-content-center align-items-center h-100">
+										<canvas id="myChart" height="100"></canvas>
+	
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+	
+				</div>
+				<!--  fim conteudo -->
+			</div>
+		</th:block>
+	</th:block>
+
+	<th:block th:replace="fixos/layout :: scripts"></th:block>
+	<!-- script da pagina  -->
+	
+	<!-- Variavel global para informações do grafico -->
+	<script th:inline="javascript">
+		//variavel global para os grafico
+		var dashinfo;
+		dashinfo = /*[[${dashinfo}]]*/ "";
+		
+		console.log(dashinfo);
+	</script>
+	<script >
+		var dados = [ dashinfo.ATIVO, dashinfo.INATIVO, dashinfo.AFASTADO ]
+		var ctx = document.getElementById('dashChartFunc1');
+		var myDoughnutChart = new Chart(ctx,
+				{
+					type : 'doughnut',
+					data : {
+						//legenda
+						labels: ['Ativos','Inativos','Afastado'],
+						//valores no grafico
+						datasets : [ {
+							//3 valores
+							data : dados,
+							//cor de fundo										    
+							backgroundColor : [ 
+									'rgba(197, 255, 105, 1)',
+									'rgba(255, 145, 105, 1)',
+									'rgba(128, 128, 128, 1)' ],
+							//cor da borda
+							borderColor : [ 
+									'rgba(197, 255, 105, 1)',
+									'rgba(255, 145, 105, 1)',
+									'rgba(128, 128, 128, 1)' ],
+						} ],
+					},
+					options : {
+							responsive: true,
+							legend : {
+								display: false
+							}
+						}				
+				});
+	</script>
+	<!-- card funcionarios -->
+	<script >
+		var dados = [ dashinfo.ATIVO, dashinfo.INATIVO, dashinfo.AFASTADO ]
+		var ctx = document.getElementById('dashChartFunc');
+		var myDoughnutChart = new Chart(ctx,
+				{
+					type : 'doughnut',
+					data : {
+						//legenda
+						labels: ['Ativos','Inativos','Afastado'],
+						//valores no grafico
+						datasets : [ {
+							//3 valores
+							data : dados,
+							//cor de fundo										    
+							backgroundColor : [ 
+									'rgba(197, 255, 105, 1)',
+									'rgba(255, 145, 105, 1)',
+									'rgba(128, 128, 128, 1)' ],
+							//cor da borda
+							borderColor : [ 
+									'rgba(197, 255, 105, 1)',
+									'rgba(255, 145, 105, 1)',
+									'rgba(128, 128, 128, 1)' ],
+						} ],
+					},
+					options : {
+							responsive: true,
+							legend : {
+								display: false
+							}
+						}				
+				});
+	</script>
+	<!-- card Obras -->
+	<script>
+		var dados = [ dashinfo.QtdObraEXECUTANDO, dashinfo.QtdObraCONCLUIDA,dashinfo.QtdObraANALISANDO ,dashinfo.QtdObraPERDIDA]
+		var ctx = document.getElementById('dashChartObra');
+		
+		var myDoughnutChart = new Chart(ctx,{
+			
+					type : 'doughnut',
+					
+					data : {
+						labels: ['Ocorrendo','Realizadas','Analisando','Perdidas'],
+						
+						datasets : [{
+							
+							//4 valores
+							data : dados,
+							//cor de fundo										    
+							backgroundColor : [ 
+									'rgba(197, 255, 105, 1)',
+									'rgba(255, 145, 105, 1)',
+									'rgba(0, 255, 255, 1)',
+									'rgba(128, 128, 128, 1)' ],
+							//cor da borda
+							borderColor : [ 
+									'rgba(197, 255, 105, 1)',
+									'rgba(255, 145, 105, 1)',
+									'rgba(0, 255, 255, 1)',
+									'rgba(128, 128, 128, 1)'],
+						}],
+					},
+					options : {
+							responsive: true,
+							legend : {
+								display: false
+							}
+							
+						}
+					
+				});
+		
+		console.log(myDoughnutChart);
+	</script>
+	<!-- card teste -->
+	<script th:inline="javascript">
+	var test = [10,15.5,20.22,12,15,5];
+	
+	var ctx = document.getElementById('myChart');
+	var myChart = new Chart(ctx, {
+	   
+		type: 'line',
+	    data: {
+	        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+	        
+	        datasets: [{
+	            label: '# of Votes',
+	            data: test,
+	   
+	            borderColor: [
+	                'rgba(255, 99, 132, 1)',
+	                'rgba(54, 162, 235, 1)',
+	                'rgba(255, 206, 86, 1)',
+	                'rgba(75, 192, 192, 1)',
+	                'rgba(153, 102, 255, 1)',
+	                'rgba(255, 159, 64, 1)'
+	            ],
+	            borderWidth: 1
+	        }]
+	    },
+	    options: {
+	    	responsive: true,
+			legend : {
+				display: false,
+				position: 'bottom'
+			},
+			
+	        scales: {
+	            yAxes: [{
+	                ticks: {
+	                    beginAtZero: true
+	                }
+	            }]
+	        }
+	    }
+	});
+	</script>
+
+</body>
+</html>
