@@ -29,28 +29,22 @@ import com.jeff.repository.ObraRepository;
 @Controller
 @RequestMapping("/obras")
 public class ObraController {
-	//auto wired faz com q o spring faça a injeção de uma implementação automaticamente
-	
 	@Autowired
 	private ObraRepository obraRepo;
-	
 	@Autowired
 	private FuncionarioRepository funcRepo;
-	
 	@Autowired
 	private MovimentacaoRepository mr;
-	
 	@RequestMapping(value="/cadastrarObra", method = RequestMethod.GET)
 	public ModelAndView form(){
-		
 		ModelAndView mv = new ModelAndView("obra/cadastrarObra");
-		//pegando lista de funcionários para auxiliar a adicionar a equipe
+		
 		List<Funcionario> funcionarios = funcRepo.getAllFuncs();
 		mv.addObject("situacao",SituacaoObra.values());
 		mv.addObject("funcionarios",funcionarios);
 		List<String> controles = obraRepo.getControlesObras();
 		mv.addObject("controles",controles);
-		//mandando para o front um funcionario vazio para que ele saiba quais os atributos pegar para o json automatico
+		
 		mv.addObject("obra",new Obra());
 		return mv;
 	}

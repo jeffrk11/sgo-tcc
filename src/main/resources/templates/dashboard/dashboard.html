@@ -34,9 +34,6 @@
 						<div class="p-2 w-100">
 							<th:block th:include="dashboard/cards :: card_pequeno_total_icone('Total de Contas a Pagar',${dashinfo.get('QtdMovimentacaoPENDENTE')},'fa-file-invoice-dollar','/financeiro/consultar')"></th:block>
 						</div>
-						<div class="p-2 w-100"> 
-							<th:block th:include="dashboard/cards :: card_pequeno_total_icone('Total de Hipopotamos','45','fa-hippo','#')"></th:block>
-						</div>
 					</div>
 				</div>
 				<div class="row no-gutters">
@@ -49,15 +46,19 @@
 						<div class="w-100 p-2">
 							<th:block th:include="dashboard/cards :: card_pequeno_total_icone('Sálario de Funcionários ativos',${dashinfo.get('SalarioAtivos')} ?: 'Sem funcionários ativos' , 'fa-coins fa-3x','/funcionarios/lista')">
 						</div>
+						<!--card obras quantitativo e grafico-->
+						<div class="w-100 h-100 p-2 p-2">
+							<th:block th:replace="dashboard/cards :: card_medio_obra"></th:block>
+						</div>
 						<!-- card grafico func -->
 						<div class="w-100 h-100 p-2">
-							<!--Card funcionarios quantitativo e grafico-->
-							<th:block th:replace="dashboard/cards :: card_medio_funcionario"></th:block>
+							
 						</div>
 					</div>				
 					<!--card obras quantitativo e grafico-->
 					<div class="col-md-6 col-xxl-3 p-2">
-						<th:block th:replace="dashboard/cards :: card_medio_obra"></th:block>
+						<!--Card funcionarios quantitativo e grafico-->
+							<th:block th:replace="dashboard/cards :: card_medio_funcionario"></th:block>
 					</div>
 					<!--card clientes-->
 					<div class="col-md-6 col-xxl-3 p-2">

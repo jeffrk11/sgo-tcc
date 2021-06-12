@@ -40,8 +40,6 @@ public class Permissao implements Serializable {
 		this.nome = nome;
 	}
 	
-	
-	
 	public List<Usuario> getUsuarios() {
 		return usuarios;
 	}

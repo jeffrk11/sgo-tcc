@@ -18,12 +18,43 @@
 	<th:block th:include="fixos/layout :: esqueleto(~{ :: .conteudo})">
 		<!-- conteudo da pagina dentro do esqueleto -->	
 		<th:block class="conteudo">
-			<div class="d-flex flex-column"> 
+			<div class="w-100 d-flex flex-column"> 
 				<!-- conteudo da pagina aqui -->
-				<th:block class="fixos/componentes :: modal_aviso('Error Você não esta autorizado')"></th:block>
+				<div style="background-color: transparent" class="card w-100" id="modal-aviso" tabindex="-1">
+					<div class="modal-dialog modal-dialog-centered modal w-100">
+						<div class="modal-content p-0 rounded-4"
+							style="background-color: rgb(14, 28, 47)">
+							<div id="head_modal_aviso"
+								class="row lign-items-start justify-content-center m-0 rounded-4-top">
+								<i id="icon_modal_aviso"
+									class="fas fa-exclamation-circle fa-6x p-3"
+									style="color: rgb(255, 255, 255)"></i>
+							</div>
+							<div class="column p-2 m-0 lign-items-start justify-content-between">
+								<h2 style="color: rgb(255, 255, 255); text-align:center;">Aviso!</h2>
+								<h4 style="color: rgb(255, 255, 255); text-align:center;">Página não encontrada :(</h4>
+							</div>
+							<div class="row p-2 m-0 lign-items-start justify-content-center">
+								<div class="d-flex flex-row">
+									<h5 style="text-align: center; color: rgb(255, 255, 255)"
+										id="aviso_txt" class="mb-2"></h5>
+									<h5 style="text-align: center; color: rgb(255, 255, 255)"
+										id="var_txt"></h5>
+								</div>
+							</div>
+							<div class="row p-2 m-2 lign-items-start justify-content-center">
+								<div class="d-flex flex-row justify-content-around w-100">
+									<a id="btn_modal_aviso_si" type="button" href="/" style="color: rgb(255, 255, 255)"
+										class="btn btn-outline-success btn-lg  align-self-end pl-4 pr-4 ">Voltar</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 				<!--  fim conteudo -->
 			</div>
 		</th:block>
+	
 	</th:block>
 	<!-- script modal aviso customizado -->
 	<th:block th:replace="fixos/componentes :: modal_aviso"></th:block>	

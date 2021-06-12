@@ -1,31 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head th:replace="fixos/layout :: head(~{ :: .titulo},~{})">
 <meta charset="UTF-8">
 <title class="titulo">Cadastrar Obra</title>
-
 </head>
-
 <body>
 	<th:block th:include="fixos/layout :: esqueleto(~{ :: .conteudo})">
 		<!-- conteudo da pagina dentro do esqueleto -->	
 		<th:block class="conteudo">
 			<form id="form">
-				<!-- <th:block th:include="mensagemValidacao"></th:block> -->
 				<!-- card obra-->
 				<th:block th:replace="obra/cards :: card_obra"></th:block>
-
 				<!-- card Equipes -->
 				<th:block th:replace="obra/cards :: card_equipe"></th:block>
-
 				<!-- btns form -->
 				<div class="d-flex justify-content-around mt-2 mb-5">
 					<button type="submit" id="btn_cadastrar"
 						class="btn btn-outline-success btn-lg">Cadastrar</button>
 					<button type="button" id="btn_cancelar"
 						class="btn btn-outline-danger btn-lg">Cancelar</button>
-
 				</div>
 			</form>
 		</th:block>

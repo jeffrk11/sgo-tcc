@@ -66,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		 http.authorizeRequests().antMatchers("/webjars/**","/imgs/**","/css/**").permitAll();
 		 http
 	        .authorizeRequests()
-	        	.antMatchers("/obras/**","/funcionarios/**").not().hasRole("VISITANTE")
+	        	.antMatchers("/obras/**","/funcionarios/**","/financeiro/**").not().hasRole("VISITANTE")
 	            // Para qualquer requisição (anyRequest) é preciso estar 
 	            // autenticado (authenticated).
 	            .anyRequest().authenticated()

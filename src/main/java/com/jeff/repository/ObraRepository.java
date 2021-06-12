@@ -12,14 +12,10 @@ import com.jeff.model.Obra;
 
 public interface ObraRepository extends JpaRepository<Obra, String> {
 	Obra findByCd(long cd);
-	
-	//@Query(value="INSERT INTO tb_obra (nm_descricao) values (:text)",nativeQuery = true)
-	//void insertObra(@Param("text")String descricao);
-		 
+
 	@Query(value = "SELECT * FROM tb_obra ORDER BY cd ASC", nativeQuery = true)
 	List<Obra> getAllObras();
-	
-	//retorna obras com os codigos passados
+
 	@Query(value = "SELECT * FROM tb_obra WHERE cd in :cds", nativeQuery = true)
 	List<Obra> getAllByCds(@Param("cds") String[] codigos);
 	

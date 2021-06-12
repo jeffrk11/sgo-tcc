@@ -18,11 +18,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import com.jeff.enums.SituacaoObra;
+
 @Entity
 @Table(name = "tb_obra")
 public class Obra implements Serializable{
 	private static final  long serialVersionUID = 1L;
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long cd;
@@ -43,16 +44,13 @@ public class Obra implements Serializable{
 	private String situacao;
 	@Column(name="nm_cliente", length = 40)
 	private String cliente;
-	
 	@ManyToMany
 	@JoinTable(name="tb_obras_funcionarios", 
 		joinColumns=		{@JoinColumn(name="obra_cd")}, 
 		inverseJoinColumns=	{@JoinColumn(name="funcionario_id")})
 	private List<Funcionario> funcionario;
-	
 	@OneToMany(mappedBy="obra")
 	private List<Movimentacao> movimentacao;
-	
 	
 	public String getCliente() {
 		return cliente;
